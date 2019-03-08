@@ -1,6 +1,7 @@
 package GUI;
 
 import ImageRS.ImageReaderSaver;
+import lombok.Getter;
 import lombok.extern.java.Log;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.util.Arrays;
 
 @Log
+@Getter
 public class ImageGUI {
     public static final String ERROR = "Error";
     private JButton loadImageButton;
@@ -33,10 +35,8 @@ public class ImageGUI {
                 @Override
                 public boolean accept(File f) {
                     String fileName = f.getName().toLowerCase();
-                    if (fileName.endsWith(".jpg") || fileName.endsWith(".png")
-                            || fileName.endsWith(".tiff") || fileName.endsWith(".bmp") || fileName.endsWith(".svg")) {
-                        return true;
-                    } else return false;
+                    return fileName.endsWith(".jpg") || fileName.endsWith(".png")
+                            || fileName.endsWith(".tiff") || fileName.endsWith(".bmp") || fileName.endsWith(".svg");
                 }
 
                 @Override
@@ -94,85 +94,49 @@ public class ImageGUI {
             }
         });
 
-        acceptButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String blueText = textFieldBlue.getText().trim();
-                String redText = textFieldRed.getText().trim();
-                String greenText = textFieldGreen.getText().trim();
-                if (greenText.isEmpty() || redText.isEmpty() || blueText.isEmpty()) {
-                    JOptionPane.showMessageDialog(panel, "One field is empty", ERROR, JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                int blue = 0, red = 0, green = 0;
-                try {
-                    blue = Integer.parseInt(blueText);
-                    red = Integer.parseInt(redText);
-                    green = Integer.parseInt(greenText);
-                } catch (NumberFormatException ex) {
-                    log.severe("Text is not a number in RGB input error:  " + ex.getMessage() + Arrays.toString(ex.getStackTrace()));
-                    JOptionPane.showMessageDialog(panel, "One field is a text not a number!!", ERROR, JOptionPane.ERROR_MESSAGE);
-                }
-                if (blue > 255 || red > 255 || green > 255) {
-                    JOptionPane.showMessageDialog(panel, "Number should be less than 256 !!", ERROR, JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
-                Color color = new Color(red, green, blue);
-                bufferedImage.setRGB(x,y,color.getRGB());
-                imageLabel.setIcon(new ImageIcon(bufferedImage));
+        acceptButton.addActionListener(e -> {
+            String blueText = textFieldBlue.getText().trim();
+            String redText = textFieldRed.getText().trim();
+            String greenText = textFieldGreen.getText().trim();
+            if (greenText.isEmpty() || redText.isEmpty() || blueText.isEmpty()) {
+                JOptionPane.showMessageDialog(panel, "One field is empty", ERROR, JOptionPane.ERROR_MESSAGE);
+                return;
             }
+            int blue = 0, red = 0, green = 0;
+            try {
+                blue = Integer.parseInt(blueText);
+                red = Integer.parseInt(redText);
+                green = Integer.parseInt(greenText);
+            } catch (NumberFormatException ex) {
+                log.severe("Text is not a number in RGB input error:  " + ex.getMessage() + Arrays.toString(ex.getStackTrace()));
+                JOptionPane.showMessageDialog(panel, "One field is a text not a number!!", ERROR, JOptionPane.ERROR_MESSAGE);
+            }
+            if (blue > 255 || red > 255 || green > 255) {
+                JOptionPane.showMessageDialog(panel, "Number should be less than 256 !!", ERROR, JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
+            Color color = new Color(red, green, blue);
+            bufferedImage.setRGB(x,y,color.getRGB());
+            imageLabel.setIcon(new ImageIcon(bufferedImage));
         });
-        imageLabel.addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                double zoom;
-                if (e.getWheelRotation()>=0) {
-                     zoom= 0.8;
+        imageLabel.addMouseWheelListener(e -> {
+            double zoom;
+            if (e.getWheelRotation()>=0) {
+                 zoom= 0.8;
 
-                }else
-                    zoom = 1.2;
-                BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
-                int newImageWidth = (int) (bufferedImage.getWidth() * zoom);
-                int newImageHeight = (int) (bufferedImage.getHeight() * zoom);
-                BufferedImage resizedImage = new BufferedImage(newImageWidth , newImageHeight, bufferedImage.getType());
-                Graphics2D g = resizedImage.createGraphics();
-                g.drawImage(bufferedImage, 0, 0, newImageWidth , newImageHeight , null);
-                g.dispose();
-                imageLabel.setIcon(new ImageIcon(resizedImage));
-            }
+            }else
+                zoom = 1.2;
+            BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
+            int newImageWidth = (int) (bufferedImage.getWidth() * zoom);
+            int newImageHeight = (int) (bufferedImage.getHeight() * zoom);
+            BufferedImage resizedImage = new BufferedImage(newImageWidth , newImageHeight, bufferedImage.getType());
+            Graphics2D g = resizedImage.createGraphics();
+            g.drawImage(bufferedImage, 0, 0, newImageWidth , newImageHeight , null);
+            g.dispose();
+            imageLabel.setIcon(new ImageIcon(resizedImage));
         });
     }
 
-    public JButton getLoadImageButton() {
-        return loadImageButton;
-    }
 
-    public void setLoadImageButton(JButton loadImageButton) {
-        this.loadImageButton = loadImageButton;
-    }
-
-    public JButton getSaveImageButton() {
-        return saveImageButton;
-    }
-
-    public void setSaveImageButton(JButton saveImageButton) {
-        this.saveImageButton = saveImageButton;
-    }
-
-    public JLabel getImageLabel() {
-        return imageLabel;
-    }
-
-    public void setImageLabel(JLabel imageLabel) {
-        this.imageLabel = imageLabel;
-    }
-
-    public JPanel getPanel() {
-        return panel;
-    }
-
-    public void setPanel(JPanel panel) {
-        this.panel = panel;
-    }
 }
