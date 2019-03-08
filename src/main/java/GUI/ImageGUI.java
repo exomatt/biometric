@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 @Log
 public class ImageGUI {
+    public static final String ERROR = "Error";
     private JButton loadImageButton;
     private JButton saveImageButton;
     private JLabel imageLabel;
@@ -100,7 +101,7 @@ public class ImageGUI {
                 String redText = textFieldRed.getText().trim();
                 String greenText = textFieldGreen.getText().trim();
                 if (greenText.isEmpty() || redText.isEmpty() || blueText.isEmpty()) {
-                    JOptionPane.showMessageDialog(panel, "One field is empty", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "One field is empty", ERROR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 int blue = 0, red = 0, green = 0;
@@ -110,10 +111,10 @@ public class ImageGUI {
                     green = Integer.parseInt(greenText);
                 } catch (NumberFormatException ex) {
                     log.severe("Text is not a number in RGB input error:  " + ex.getMessage() + Arrays.toString(ex.getStackTrace()));
-                    JOptionPane.showMessageDialog(panel, "One field is a text not a number!!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "One field is a text not a number!!", ERROR, JOptionPane.ERROR_MESSAGE);
                 }
                 if (blue > 255 || red > 255 || green > 255) {
-                    JOptionPane.showMessageDialog(panel, "Number should be less than 256 !!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, "Number should be less than 256 !!", ERROR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
@@ -131,7 +132,6 @@ public class ImageGUI {
 
                 }else
                     zoom = 1.2;
-                System.out.println("Jestem");
                 BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
                 int newImageWidth = (int) (bufferedImage.getWidth() * zoom);
                 int newImageHeight = (int) (bufferedImage.getHeight() * zoom);
