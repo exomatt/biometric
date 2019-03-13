@@ -27,7 +27,7 @@ public class ImageGUI {
     private JButton acceptButton;
     private int x;
     private int y;
-
+    private BufferedImage firstImage;
     public ImageGUI() {
         this.loadImageButton.addActionListener((ActionEvent e) -> {
             JFileChooser imageOpener = new JFileChooser();
@@ -47,8 +47,8 @@ public class ImageGUI {
 
             int returnValue = imageOpener.showDialog(null, "Select image");
             if (returnValue == JFileChooser.APPROVE_OPTION) {
-                BufferedImage img = ImageReaderSaver.loadImage(imageOpener.getSelectedFile().getPath());
-                this.imageLabel.setIcon(new ImageIcon(img));
+                firstImage = ImageReaderSaver.loadImage(imageOpener.getSelectedFile().getPath());
+                this.imageLabel.setIcon(new ImageIcon(firstImage));
             }
         });
 
@@ -80,10 +80,10 @@ public class ImageGUI {
         imageLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
+                firstImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
                 x = e.getX();
                 y = e.getY();
-                Color color = new Color(bufferedImage.getRGB(x, y));
+                Color color = new Color(firstImage.getRGB(x, y));
                 int blue = color.getBlue();
                 int red = color.getRed();
                 int green = color.getGreen();
@@ -111,30 +111,32 @@ public class ImageGUI {
                 log.severe("Text is not a number in RGB input error:  " + ex.getMessage() + Arrays.toString(ex.getStackTrace()));
                 JOptionPane.showMessageDialog(panel, "One field is a text not a number!!", ERROR, JOptionPane.ERROR_MESSAGE);
             }
-            if (blue > 255 || red > 255 || green > 255) {
-                JOptionPane.showMessageDialog(panel, "Number should be less than 256 !!", ERROR, JOptionPane.ERROR_MESSAGE);
+            if (blue > 255 || red > 255 || green > 255 || blue < 0 || red < 0 || green < 0) {
+                JOptionPane.showMessageDialog(panel, "Number should be beetween  0 and 255 ", ERROR, JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
+            firstImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
             Color color = new Color(red, green, blue);
-            bufferedImage.setRGB(x,y,color.getRGB());
-            imageLabel.setIcon(new ImageIcon(bufferedImage));
+            firstImage.setRGB(x, y, color.getRGB());
+            imageLabel.setIcon(new ImageIcon(firstImage));
         });
         imageLabel.addMouseWheelListener(e -> {
             double zoom;
-            if (e.getWheelRotation()>=0) {
-                 zoom= 0.8;
+            if (e.getWheelRotation() >= 0) {
+                zoom = 0.8;
 
-            }else
+            } else
                 zoom = 1.2;
             BufferedImage bufferedImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
             int newImageWidth = (int) (bufferedImage.getWidth() * zoom);
             int newImageHeight = (int) (bufferedImage.getHeight() * zoom);
-            BufferedImage resizedImage = new BufferedImage(newImageWidth , newImageHeight, bufferedImage.getType());
-            Graphics2D g = resizedImage.createGraphics();
-            g.drawImage(bufferedImage, 0, 0, newImageWidth , newImageHeight , null);
-            g.dispose();
-            imageLabel.setIcon(new ImageIcon(resizedImage));
+//            BufferedImage resizedImage = new BufferedImage(newImageWidth, newImageHeight, bufferedImage.getType());
+//            Graphics2D g = resizedImage.createGraphics();
+//            g.drawImage(bufferedImage, 0, 0, newImageWidth, newImageHeight, null);
+//            g.dispose();
+//            imageLabel.setIcon(new ImageIcon(resizedImage));
+            Image scaledInstance = firstImage.getScaledInstance(newImageWidth, newImageHeight, Image.SCALE_SMOOTH);
+            imageLabel.setIcon(new ImageIcon(scaledInstance));
         });
     }
 
