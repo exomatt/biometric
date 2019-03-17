@@ -4,7 +4,7 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {comp scrollPane1:::p:600:p, space :0:423:x}, seq l {space :p:69:p, par l {comp label2:::p::p, seq {comp label3:::p::p, space :p:83:p, comp acceptButton:::p::p}, comp label1::l:p::p, comp textFieldRed::l:p:121:p, par t:l::p {comp textFieldBlue::l::116:x, comp textFieldGreen::l::116:x}}, space ::758:x}}"
+			"$horizontalGroup": "par l {seq l {space :p:69:p, par l {comp label2:::p::p, seq {comp label3:::p::p, space :p:83:p, comp acceptButton:::p::p}, comp label1::l:p::p, comp textFieldRed::l:p:121:p, par t:l::p {comp textFieldBlue::l::116:x, comp textFieldGreen::l::116:x}}, space ::758:x}, seq l {comp scrollPane1:::p:600:p, space :0:423:x}}"
 			"$verticalGroup": "par l {seq l {comp scrollPane1:::p:400:p, space :p:30:p, comp label1:::p::p, space :::p, comp textFieldRed:::p::p, space :p:4:p, par b {comp label3::b:p::p, comp acceptButton::b:p::p}, space :::p, comp textFieldGreen:::p::p, space :::p, comp label2:::p::p, space :::p, comp textFieldBlue:::p::p, space :0:23:x}}"
 		} ) {
 			name: "this"
@@ -58,8 +58,13 @@ new FormModel {
 					"text": "histogram"
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "showHistogramButton"
-						"text": "show histogram"
+						"text": "show histograms"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHistogramButtonActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "histogramEqualizationMenuItem"
+						"text": "histogram equalization"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "histogramEqualizationMenuItemActionPerformed", true ) )
 					} )
 				} )
 			}

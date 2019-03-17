@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author unknown
@@ -143,8 +144,37 @@ public class MainGUI extends JFrame {
         }
         Histogram histogram = new Histogram();
         histogram.display(firstImage);
+
     }
 
+    private void histogramEqualizationMenuItemActionPerformed(ActionEvent e) {
+        //red 0 green 1 blue 2
+        Histogram histogram = new Histogram();
+        List<int[]> calculateHistograms = histogram.calculateHistograms(firstImage);
+        int pixels = firstImage.getWidth() * firstImage.getHeight();
+        //red
+        double[] distribution = histogram.distribution(calculateHistograms.get(0), pixels);
+        int[] lookUpTable = histogram.lookUpTable(distribution);
+        BufferedImage imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 0);
+        histogram.displayOneType(imageRedEq,0);
+        //green
+        distribution = histogram.distribution(calculateHistograms.get(1),pixels);
+        lookUpTable = histogram.lookUpTable(distribution);
+        imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 1);
+        histogram.displayOneType(imageRedEq,1);
+        //blue
+        distribution = histogram.distribution(calculateHistograms.get(2),pixels);
+        lookUpTable = histogram.lookUpTable(distribution);
+        imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 2);
+        histogram.displayOneType(imageRedEq,2);
+    }
+    private static BufferedImage copyImage(BufferedImage source){
+        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+        Graphics g = b.getGraphics();
+        g.drawImage(source, 0, 0, null);
+        g.dispose();
+        return b;
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -154,6 +184,7 @@ public class MainGUI extends JFrame {
         saveImageButton = new JMenuItem();
         menu2 = new JMenu();
         showHistogramButton = new JMenuItem();
+        histogramEqualizationMenuItem = new JMenuItem();
         scrollPane1 = new JScrollPane();
         imageLabel = new JLabel();
         label1 = new JLabel();
@@ -189,9 +220,14 @@ public class MainGUI extends JFrame {
                 menu2.setText("histogram");
 
                 //---- showHistogramButton ----
-                showHistogramButton.setText("show histogram");
+                showHistogramButton.setText("show histograms");
                 showHistogramButton.addActionListener(e -> showHistogramButtonActionPerformed(e));
                 menu2.add(showHistogramButton);
+
+                //---- histogramEqualizationMenuItem ----
+                histogramEqualizationMenuItem.setText("histogram equalization");
+                histogramEqualizationMenuItem.addActionListener(e -> histogramEqualizationMenuItemActionPerformed(e));
+                menu2.add(histogramEqualizationMenuItem);
             }
             menuBar1.add(menu2);
         }
@@ -219,9 +255,6 @@ public class MainGUI extends JFrame {
         contentPaneLayout.setHorizontalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 423, Short.MAX_VALUE))
-                .addGroup(contentPaneLayout.createSequentialGroup()
                     .addGap(69, 69, 69)
                     .addGroup(contentPaneLayout.createParallelGroup()
                         .addComponent(label2)
@@ -235,6 +268,9 @@ public class MainGUI extends JFrame {
                             .addComponent(textFieldBlue, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                             .addComponent(textFieldGreen, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)))
                     .addContainerGap(758, Short.MAX_VALUE))
+                .addGroup(contentPaneLayout.createSequentialGroup()
+                    .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 423, Short.MAX_VALUE))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
@@ -269,6 +305,7 @@ public class MainGUI extends JFrame {
     private JMenuItem saveImageButton;
     private JMenu menu2;
     private JMenuItem showHistogramButton;
+    private JMenuItem histogramEqualizationMenuItem;
     private JScrollPane scrollPane1;
     private JLabel imageLabel;
     private JLabel label1;
