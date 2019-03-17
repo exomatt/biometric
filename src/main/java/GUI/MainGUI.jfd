@@ -1,0 +1,71 @@
+JFDML JFormDesigner: "6.0.6.2.195" Java: "1.8.0_152-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {comp scrollPane1:::p:600:p, space :0:423:x}, seq l {space :p:69:p, par l {comp label2:::p::p, seq {comp label3:::p::p, space :p:83:p, comp acceptButton:::p::p}, comp label1::l:p::p, comp textFieldRed::l:p:121:p, par t:l::p {comp textFieldBlue::l::116:x, comp textFieldGreen::l::116:x}}, space ::758:x}}"
+			"$verticalGroup": "par l {seq l {comp scrollPane1:::p:400:p, space :p:30:p, comp label1:::p::p, space :::p, comp textFieldRed:::p::p, space :p:4:p, par b {comp label3::b:p::p, comp acceptButton::b:p::p}, space :::p, comp textFieldGreen:::p::p, space :::p, comp label2:::p::p, space :::p, comp textFieldBlue:::p::p, space :0:23:x}}"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "imageLabel"
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label1"
+				"text": "red"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label2"
+				"text": "blue"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label3"
+				"text": "green"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldRed"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldGreen"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "acceptButton"
+				"text": "change"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldBlue"
+			} )
+			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "menuBar1"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu1"
+					"text": "file"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "loadImageButton"
+						"text": "load"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "saveImageButton"
+						"text": "save"
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu2"
+					"text": "histogram"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "showHistogramButton"
+						"text": "show histogram"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showHistogramButtonActionPerformed", true ) )
+					} )
+				} )
+			}
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 20 )
+			"size": new java.awt.Dimension( 1025, 690 )
+		} )
+	}
+}

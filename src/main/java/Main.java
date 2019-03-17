@@ -1,4 +1,5 @@
 import GUI.ImageGUI;
+import GUI.MainGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,12 +17,16 @@ public class  Main {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        JFrame app = new JFrame("App");
-        app.setMinimumSize(new Dimension(800,600));
-        app.setContentPane(new ImageGUI().getPanel());
-        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        app.pack();
-        app.setVisible(true);
+        MainGUI mainGUI = new MainGUI();
+        mainGUI.setMinimumSize(new Dimension(800,600));
+        mainGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainGUI.setVisible(true);
+//        JFrame app = new JFrame("App");
+//        app.setMinimumSize(new Dimension(800,600));
+//        app.setContentPane(new ImageGUI().getPanel());
+//        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        app.pack();
+//        app.setVisible(true);
 
     }
 }

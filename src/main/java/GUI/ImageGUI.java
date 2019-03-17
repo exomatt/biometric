@@ -25,6 +25,8 @@ public class ImageGUI {
     private JTextField textFieldGreen;
     private JTextField textFieldBlue;
     private JButton acceptButton;
+    private JButton brightenButton;
+    private JButton darkerButton;
     private int x;
     private int y;
     private BufferedImage firstImage;
