@@ -1,6 +1,5 @@
 package histogramOperations;
 
-import org.apache.xmlgraphics.image.loader.impl.ImageBuffered;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.SwingWrapper;
@@ -10,7 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Histogram {
     public List<int[]> calculateHistograms(BufferedImage image) {
@@ -25,7 +27,7 @@ public class Histogram {
                 histogramRed[color.getRed()]++;
                 histogramGreen[color.getGreen()]++;
                 histogramBlue[color.getBlue()]++;
-                histogramAverage[(color.getBlue()+color.getGreen()+color.getRed())/3]++;
+                histogramAverage[(color.getBlue() + color.getGreen() + color.getRed()) / 3]++;
             }
         }
 
@@ -45,11 +47,12 @@ public class Histogram {
         }
 
         List<int[]> data = calculateHistograms(firstImage);
-        paintHistogram(xTable, data.get(0),"RED", Color.RED,firstImage);
-        paintHistogram(xTable, data.get(1),"GREEN",Color.GREEN,firstImage);
-        paintHistogram(xTable, data.get(2),"BLUE",Color.BLUE,firstImage);
-        paintHistogram(xTable, data.get(3),"AVERAGE",Color.GRAY,firstImage);
+        paintHistogram(xTable, data.get(0), "RED", Color.RED, firstImage);
+        paintHistogram(xTable, data.get(1), "GREEN", Color.GREEN, firstImage);
+        paintHistogram(xTable, data.get(2), "BLUE", Color.BLUE, firstImage);
+        paintHistogram(xTable, data.get(3), "AVERAGE", Color.GRAY, firstImage);
     }
+
     public void displayOneType(BufferedImage firstImage, int type) {
         int[] xTable = new int[256];
         for (int i = 0; i < 256; i++) {
@@ -57,19 +60,19 @@ public class Histogram {
         }
 
         List<int[]> data = calculateHistograms(firstImage);
-        if (type==0) {
-            paintHistogram(xTable, data.get(0),"RED", Color.RED,firstImage);
+        if (type == 0) {
+            paintHistogram(xTable, data.get(0), "RED", Color.RED, firstImage);
         }
-        if (type==1) {
-            paintHistogram(xTable, data.get(1),"GREEN",Color.GREEN,firstImage);
+        if (type == 1) {
+            paintHistogram(xTable, data.get(1), "GREEN", Color.GREEN, firstImage);
         }
-        if (type==2) {
-            paintHistogram(xTable, data.get(2),"BLUE",Color.BLUE,firstImage);
+        if (type == 2) {
+            paintHistogram(xTable, data.get(2), "BLUE", Color.BLUE, firstImage);
         }
     }
 
     private void paintHistogram(int[] xTable, int[] data, String name, Color color, BufferedImage image) {
-        CategoryChart chart = new CategoryChartBuilder().width(1200).height(1000).title(name ).xAxisTitle("Value").yAxisTitle("Count").build();
+        CategoryChart chart = new CategoryChartBuilder().width(1200).height(1000).title(name).xAxisTitle("Value").yAxisTitle("Count").build();
         chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideE);
         chart.getStyler().setHasAnnotations(false);
         chart.getStyler().setXAxisLabelAlignmentVertical(Styler.TextAlignment.Centre);
@@ -80,22 +83,22 @@ public class Histogram {
             JFrame jFrame = new SwingWrapper(chart).displayChart();
             ScrollPane scrollPane = new ScrollPane();
             JLabel jLabel = new JLabel(new ImageIcon(image));
-            jLabel.setSize(new Dimension(600,400));
+            jLabel.setSize(new Dimension(600, 400));
             scrollPane.add(jLabel);
-            scrollPane.setSize(new Dimension(600,400));
-            jFrame.add(scrollPane,BorderLayout.WEST);
+            scrollPane.setSize(new Dimension(600, 400));
+            jFrame.add(scrollPane, BorderLayout.WEST);
             jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         });
         t.start();
     }
 
-    public double[] distribution(int [] histogram, double pixels){
+    public double[] distribution(int[] histogram, double pixels) {
         double[] tableDistribution = new double[256];
         int counter = 1;
         for (int i = 0; i < tableDistribution.length; i++) {
             for (int j = 0; j < counter; j++) {
-                tableDistribution[i]+=histogram[j]/pixels;
+                tableDistribution[i] += histogram[j] / pixels;
             }
 //            tableDistribution[i]=tableDistribution[i]/pixels;
             counter++;
@@ -104,37 +107,70 @@ public class Histogram {
 
     }
 
-    public int[] lookUpTable(double[] distribution){
-        int [] lookUpTable = new int[256];
+    public int[] lookUpTableHistogramEqualization(double[] distribution) {
+        int[] lookUpTable = new int[256];
         for (int i = 0; i < lookUpTable.length; i++) {
-            lookUpTable[i]= (int) (((distribution[i]-distribution[0])/(1-distribution[0]))*(255-1));
+            lookUpTable[i] = (int) (((distribution[i] - distribution[0]) / (1 - distribution[0])) * (255 - 1));
         }
         return lookUpTable;
     }
-    
-    public BufferedImage histogramEqualization(int[] lookUpTable, BufferedImage image, int type){
+
+    public BufferedImage histogramEqualization(int[] lookUpTable, BufferedImage image, int type) {
+        return modifyImage(lookUpTable, image, type);
+    }
+
+    private BufferedImage modifyImage(int[] lookUpTable, BufferedImage image, int type) {
         int width = image.getWidth();
         int height = image.getHeight();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Color color = new Color(image.getRGB(i, j));
-                if (type==0) {
+                if (type == 0) {
                     int red = color.getRed();
                     int newValue = lookUpTable[red];
-                    image.setRGB(i,j,new Color(newValue,color.getGreen(),color.getBlue()).getRGB());
+                    image.setRGB(i, j, new Color(newValue, color.getGreen(), color.getBlue()).getRGB());
                 }
-                if (type==1) {
+                if (type == 1) {
                     int green = color.getGreen();
                     int newValue = lookUpTable[green];
-                    image.setRGB(i,j,new Color(color.getRed(),newValue,color.getBlue()).getRGB());
-                }else {
+                    image.setRGB(i, j, new Color(color.getRed(), newValue, color.getBlue()).getRGB());
+                } else {
                     int blue = color.getBlue();
                     int newValue = lookUpTable[blue];
-                    image.setRGB(i,j,new Color(color.getRed(),color.getGreen(),newValue).getRGB());
+                    image.setRGB(i, j, new Color(color.getRed(), color.getGreen(), newValue).getRGB());
                 }
             }
         }
         return image;
+    }
+
+    ///todo naprawic kurłą
+    public BufferedImage histogramStretching(BufferedImage image, int type) {
+        List<int[]> calculateHistograms = calculateHistograms(image);
+
+        int[] lookUpTableHistogramStretching = lookUpTableHistogramStretching(image, type);
+        BufferedImage modifyImage = modifyImage(lookUpTableHistogramStretching, image, type);
+        return image;
+    }
+
+    public int[] lookUpTableHistogramStretching(BufferedImage image, int type) {
+        List<int[]> calculateHistograms = calculateHistograms(image);
+        int[] table;
+        if (type == 0) {
+            table = calculateHistograms.get(0);
+        } else if (type == 1) {
+            table = calculateHistograms.get(1);
+        } else {
+            table = calculateHistograms.get(2);
+        }
+        List<Integer> listHistogram = Arrays.stream(table).boxed().collect(Collectors.toList());
+        Integer min = Collections.min(listHistogram);
+        Integer max = Collections.max(listHistogram);
+        int temp = max - min;
+        for (int i = 0; i < table.length; i++) {
+            table[i] = ((table[i] - min) / temp) * 255;
+        }
+        return table;
     }
 }
 

@@ -154,17 +154,17 @@ public class MainGUI extends JFrame {
         int pixels = firstImage.getWidth() * firstImage.getHeight();
         //red
         double[] distribution = histogram.distribution(calculateHistograms.get(0), pixels);
-        int[] lookUpTable = histogram.lookUpTable(distribution);
+        int[] lookUpTable = histogram.lookUpTableHistogramEqualization(distribution);
         BufferedImage imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 0);
         histogram.displayOneType(imageRedEq,0);
         //green
         distribution = histogram.distribution(calculateHistograms.get(1),pixels);
-        lookUpTable = histogram.lookUpTable(distribution);
+        lookUpTable = histogram.lookUpTableHistogramEqualization(distribution);
         imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 1);
         histogram.displayOneType(imageRedEq,1);
         //blue
         distribution = histogram.distribution(calculateHistograms.get(2),pixels);
-        lookUpTable = histogram.lookUpTable(distribution);
+        lookUpTable = histogram.lookUpTableHistogramEqualization(distribution);
         imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 2);
         histogram.displayOneType(imageRedEq,2);
     }
@@ -174,6 +174,22 @@ public class MainGUI extends JFrame {
         g.drawImage(source, 0, 0, null);
         g.dispose();
         return b;
+    }
+
+    private void histogramStretchingMenuItemActionPerformed(ActionEvent e) {
+        //red 0 green 1 blue 2
+        Histogram histogram = new Histogram();
+        List<int[]> calculateHistograms = histogram.calculateHistograms(firstImage);
+        BufferedImage newImage;
+        //red
+        newImage = histogram.histogramStretching(copyImage(firstImage), 0);
+        histogram.displayOneType(newImage, 0);
+        //green
+        newImage = histogram.histogramStretching(copyImage(firstImage), 1);
+        histogram.displayOneType(newImage, 1);
+        //blue
+        newImage = histogram.histogramStretching(copyImage(firstImage), 2);
+        histogram.displayOneType(newImage, 2);
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -185,6 +201,7 @@ public class MainGUI extends JFrame {
         menu2 = new JMenu();
         showHistogramButton = new JMenuItem();
         histogramEqualizationMenuItem = new JMenuItem();
+        histogramStretchingMenuItem = new JMenuItem();
         scrollPane1 = new JScrollPane();
         imageLabel = new JLabel();
         label1 = new JLabel();
@@ -228,6 +245,11 @@ public class MainGUI extends JFrame {
                 histogramEqualizationMenuItem.setText("histogram equalization");
                 histogramEqualizationMenuItem.addActionListener(e -> histogramEqualizationMenuItemActionPerformed(e));
                 menu2.add(histogramEqualizationMenuItem);
+
+                //---- histogramStretchingMenuItem ----
+                histogramStretchingMenuItem.setText("histogram stretching ");
+                histogramStretchingMenuItem.addActionListener(e -> histogramStretchingMenuItemActionPerformed(e));
+                menu2.add(histogramStretchingMenuItem);
             }
             menuBar1.add(menu2);
         }
@@ -306,6 +328,7 @@ public class MainGUI extends JFrame {
     private JMenu menu2;
     private JMenuItem showHistogramButton;
     private JMenuItem histogramEqualizationMenuItem;
+    private JMenuItem histogramStretchingMenuItem;
     private JScrollPane scrollPane1;
     private JLabel imageLabel;
     private JLabel label1;
