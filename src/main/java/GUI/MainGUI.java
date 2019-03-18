@@ -153,20 +153,21 @@ public class MainGUI extends JFrame {
         List<int[]> calculateHistograms = histogram.calculateHistograms(firstImage);
         int pixels = firstImage.getWidth() * firstImage.getHeight();
         //red
-        double[] distribution = histogram.distribution(calculateHistograms.get(0), pixels);
-        int[] lookUpTable = histogram.lookUpTableHistogramEqualization(distribution);
+        int[] lookUpTable = histogram.lookUpTableHistogramEqualization(calculateHistograms.get(0), pixels);
         BufferedImage imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 0);
         histogram.displayOneType(imageRedEq,0);
         //green
-        distribution = histogram.distribution(calculateHistograms.get(1),pixels);
-        lookUpTable = histogram.lookUpTableHistogramEqualization(distribution);
+        lookUpTable = histogram.lookUpTableHistogramEqualization(calculateHistograms.get(1), pixels);
         imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 1);
         histogram.displayOneType(imageRedEq,1);
         //blue
-        distribution = histogram.distribution(calculateHistograms.get(2),pixels);
-        lookUpTable = histogram.lookUpTableHistogramEqualization(distribution);
+        lookUpTable = histogram.lookUpTableHistogramEqualization(calculateHistograms.get(2), pixels);
         imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 2);
         histogram.displayOneType(imageRedEq,2);
+        //all
+        imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 3);
+        histogram.displayOneType(imageRedEq, 3);
+
     }
     private static BufferedImage copyImage(BufferedImage source){
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
@@ -179,19 +180,6 @@ public class MainGUI extends JFrame {
     private void histogramStretchingMenuItemActionPerformed(ActionEvent e) {
         //red 0 green 1 blue 2
         Histogram histogram = new Histogram();
-//        List<int[]> calculateHistograms = histogram.calculateHistograms(firstImage);
-//        BufferedImage newImage;
-//        //red
-//        newImage = histogram.histogramStretching(copyImage(firstImage), 0);
-//        histogram.displayOneType(newImage, 0);
-//        //green
-//        newImage = histogram.histogramStretching(copyImage(firstImage), 1);
-//        histogram.displayOneType(newImage, 1);
-//        //blue
-//        newImage = histogram.histogramStretching(copyImage(firstImage), 2);
-//        histogram.displayOneType(newImage, 2);
-//        newImage = histogram.histogramStretching(copyImage(firstImage), 3);
-//        histogram.displayOneType(newImage, 3);
         BufferedImage copyImage = copyImage(firstImage);
         BufferedImage stretchingHistogram = histogram.stretchingHistogram(copyImage);
         histogram.display(stretchingHistogram);

@@ -9,10 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Histogram {
     public List<int[]> calculateHistograms(BufferedImage image) {
@@ -96,24 +93,15 @@ public class Histogram {
         t.start();
     }
 
-    public double[] distribution(int[] histogram, double pixels) {
-        double[] tableDistribution = new double[256];
-        int counter = 1;
-        for (int i = 0; i < tableDistribution.length; i++) {
-            for (int j = 0; j < counter; j++) {
-                tableDistribution[i] += histogram[j] / pixels;
-            }
-//            tableDistribution[i]=tableDistribution[i]/pixels;
-            counter++;
-        }
-        return tableDistribution;
-
-    }
-
-    public int[] lookUpTableHistogramEqualization(double[] distribution) {
+    public int[] lookUpTableHistogramEqualization(int[] histogram, double pixels) {
         int[] lookUpTable = new int[256];
-        for (int i = 0; i < lookUpTable.length; i++) {
-            lookUpTable[i] = (int) (((distribution[i] - distribution[0]) / (1 - distribution[0])) * (255 - 1));
+        int sum = 0;
+        for (int i = 0; i < histogram.length; i++) {
+            sum += histogram[i];
+            int val = (int) (sum * 255 / pixels);
+            if (val > 255) {
+                lookUpTable[i] = 255;
+            } else lookUpTable[i] = val;
         }
         return lookUpTable;
     }
@@ -125,9 +113,10 @@ public class Histogram {
     private BufferedImage modifyImage(int[] lookUpTable, BufferedImage image, int type) {
         int width = image.getWidth();
         int height = image.getHeight();
-        int[] lookRed = lookUpTableHistogramStretching(image, 0);
-        int[] lookGreen = lookUpTableHistogramStretching(image, 1);
-        int[] lookBlue = lookUpTableHistogramStretching(image, 2);
+        List<int[]> calculateHistograms = calculateHistograms(image);
+        int[] lookRed = lookUpTableHistogramEqualization(calculateHistograms.get(0), image.getWidth() * image.getHeight());
+        int[] lookGreen = lookUpTableHistogramEqualization(calculateHistograms.get(1), image.getWidth() * image.getHeight());
+        int[] lookBlue = lookUpTableHistogramEqualization(calculateHistograms.get(2), image.getWidth() * image.getHeight());
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Color color = new Color(image.getRGB(i, j));
@@ -159,102 +148,77 @@ public class Histogram {
         return image;
     }
 
-    ///todo naprawic kurłą
-    public BufferedImage histogramStretching(BufferedImage image, int type) {
-        int[] lookUpTableHistogramStretching = lookUpTableHistogramStretching(image, type);
-        BufferedImage modifyImage = modifyImage(lookUpTableHistogramStretching, image, type);
-        return modifyImage;
-    }
-
-    public int[] lookUpTableHistogramStretching(BufferedImage image, int type) {
-        List<int[]> calculateHistograms = calculateHistograms(image);
-        int[] table;
-        if (type == 0) {
-            table = calculateHistograms.get(0);
-        } else if (type == 1) {
-            table = calculateHistograms.get(1);
-        } else if (type == 2) {
-            table = calculateHistograms.get(2);
-        } else {
-            table = calculateHistograms.get(3);
-        }
-        List<Integer> listHistogram = Arrays.stream(table).boxed().collect(Collectors.toList());
-        Integer min = 0;
-        Integer max = 255;
-        int temp = max - min;
-        for (int i = 0; i < table.length; i++) {
-            int newValue = (int) ((table[i] - min) / (double) temp) * 255;
-            if (newValue > 255) {
-                newValue = 255;
-            }
-            table[i] = newValue;
-        }
-        return table;
-    }
-
     public BufferedImage stretchingHistogram(BufferedImage image) {
         List<int[]> calculateHistograms = calculateHistograms(image);
         int[] reds = calculateHistograms.get(0);
         int[] greens = calculateHistograms.get(1);
         int[] blues = calculateHistograms.get(2);
-        List<Integer> listHistogramRed = Arrays.stream(reds).boxed().collect(Collectors.toList());
-        List<Integer> listHistogramGreen = Arrays.stream(greens).boxed().collect(Collectors.toList());
-        List<Integer> listHistogramBlue = Arrays.stream(blues).boxed().collect(Collectors.toList());
-        int minRed = 0;
-        int minGreen = 0;
-        int minBlue = 0;
-        for (int i = 0; i < listHistogramGreen.size(); i++) {
-            if (!listHistogramGreen.get(i).equals(0)) {
-                minGreen = i;
-                break;
-            }
-        }
-        for (int i = 0; i < listHistogramRed.size(); i++) {
-            if (!listHistogramRed.get(i).equals(0)) {
-                minRed = i;
-                break;
-            }
-        }
-        for (int i = 0; i < listHistogramBlue.size(); i++) {
-            if (!listHistogramBlue.get(i).equals(0)) {
-                minBlue = i;
-                break;
-            }
-        }
-        int maxRed = 0;
-        int maxGreen = 0;
-        int maxBlue = 0;
-        Collections.reverse(listHistogramBlue);
-        Collections.reverse(listHistogramGreen);
-        Collections.reverse(listHistogramRed);
-        maxGreen = getMax(listHistogramGreen);
-        maxRed = getMax(listHistogramRed);
-        maxBlue = getMax(listHistogramBlue);
+        int minRed;
+        int minGreen;
+        int minBlue;
+
+        minRed = getMin(reds);
+        minGreen = getMin(greens);
+        minBlue = getMin(blues);
+
+        int maxRed;
+        int maxGreen;
+        int maxBlue;
+        maxGreen = getMax(reds);
+        maxRed = getMax(greens);
+        maxBlue = getMax(blues);
+
+        int[] lutRed;
+        int[] lutGreen;
+        int[] lutBlue;
+
+        lutRed = getLUT(reds, maxRed, minRed);
+        lutGreen = getLUT(greens, maxGreen, minGreen);
+        lutBlue = getLUT(blues, maxBlue, minBlue);
+
         for (int w = 0; w < image.getWidth(); w++) {
             for (int h = 0; h < image.getHeight(); h++) {
                 Color color = new Color(image.getRGB(w, h));
                 int red = color.getRed();
                 int green = color.getGreen();
                 int blue = color.getBlue();
-                int newRed = (red - minRed) / (maxRed - minRed) * 255;
-                int newBlue = (green - minGreen) / (maxBlue - minBlue) * 255;
-                int newGreen = (blue - minBlue) / (maxGreen - minGreen) * 255;
-                Color newColor = new Color(newRed, newGreen, newBlue);
+                Color newColor = new Color(lutRed[red], lutGreen[green], lutBlue[blue]);
                 image.setRGB(w, h, newColor.getRGB());
             }
         }
         return image;
     }
 
-    private int getMax(List<Integer> listHistogram) {
-        int maxGreen = 0;
-        for (int i = 0; i < listHistogram.size(); i++) {
-            if (!listHistogram.get(i).equals(0)) {
-                maxGreen = 255 - i;
+    private int[] getLUT(int[] histogram, int max, int min) {
+        int[] lut = new int[256];
+        for (int i = 0; i < histogram.length; i++) {
+            lut[i] = (int) ((i - min) * ((float) 255.0) / ((float) (max - min)));
+        }
+        return lut;
+    }
+
+    private int getMin(int[] histogram) {
+        int min = 0;
+        for (int i = 0; i < histogram.length; i++) {
+            if (histogram[i] == 0) {
+                min = i + 1;
+            } else {
                 break;
             }
         }
-        return maxGreen;
+        return min;
+    }
+
+    private int getMax(int[] histogram) {
+        int max = 255;
+        for (int i = 255; i > 0; i--) {
+            if (histogram[i] == 0) {
+                max = 255 - 1;
+            } else {
+                break;
+            }
+        }
+        return max;
     }
 
     public BufferedImage ligthen(BufferedImage image) {
