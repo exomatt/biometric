@@ -196,6 +196,22 @@ public class MainGUI extends JFrame {
         BufferedImage stretchingHistogram = histogram.stretchingHistogram(copyImage);
         histogram.display(stretchingHistogram);
     }
+
+    private void lightenButtonActionPerformed(ActionEvent e) {
+        firstImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
+        Histogram histogram = new Histogram();
+        BufferedImage ligthen = histogram.ligthen(firstImage);
+        firstImage = ligthen;
+        imageLabel.setIcon(new ImageIcon(firstImage));
+    }
+
+    private void darkerButtonActionPerformed(ActionEvent e) {
+        firstImage = ImageReaderSaver.convertIconToImage((ImageIcon) imageLabel.getIcon());
+        Histogram histogram = new Histogram();
+        BufferedImage darker = histogram.darker(firstImage);
+        firstImage = darker;
+        imageLabel.setIcon(new ImageIcon(firstImage));
+    }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -216,6 +232,8 @@ public class MainGUI extends JFrame {
         textFieldGreen = new JTextField();
         acceptButton = new JButton();
         textFieldBlue = new JTextField();
+        lightenButton = new JButton();
+        darkerButton = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -277,6 +295,14 @@ public class MainGUI extends JFrame {
         //---- acceptButton ----
         acceptButton.setText("change");
 
+        //---- lightenButton ----
+        lightenButton.setText("lighten");
+        lightenButton.addActionListener(e -> lightenButtonActionPerformed(e));
+
+        //---- darkerButton ----
+        darkerButton.setText("darker");
+        darkerButton.addActionListener(e -> darkerButtonActionPerformed(e));
+
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
@@ -285,16 +311,22 @@ public class MainGUI extends JFrame {
                     .addGap(69, 69, 69)
                     .addGroup(contentPaneLayout.createParallelGroup()
                         .addComponent(label2)
-                        .addGroup(contentPaneLayout.createSequentialGroup()
-                            .addComponent(label3)
-                            .addGap(83, 83, 83)
-                            .addComponent(acceptButton))
-                        .addComponent(label1)
-                        .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(textFieldBlue, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                            .addComponent(textFieldGreen, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)))
-                    .addContainerGap(758, Short.MAX_VALUE))
+                            .addComponent(label1)
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(textFieldBlue, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                                    .addComponent(textFieldGreen, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
+                            .addGroup(contentPaneLayout.createSequentialGroup()
+                                    .addGroup(contentPaneLayout.createParallelGroup()
+                                            .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(contentPaneLayout.createSequentialGroup()
+                                                    .addComponent(label3)
+                                                    .addGap(83, 83, 83)
+                                                    .addComponent(acceptButton)))
+                                    .addGap(101, 101, 101)
+                                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(lightenButton, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                                            .addComponent(darkerButton, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))))
+                        .addContainerGap(513, Short.MAX_VALUE))
                 .addGroup(contentPaneLayout.createSequentialGroup()
                     .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 423, Short.MAX_VALUE))
@@ -305,19 +337,22 @@ public class MainGUI extends JFrame {
                     .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
                     .addGap(30, 30, 30)
                     .addComponent(label1)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lightenButton))
                     .addGap(4, 4, 4)
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(label3)
-                        .addComponent(acceptButton))
+                            .addComponent(acceptButton)
+                            .addComponent(darkerButton))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(textFieldGreen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(label2)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(textFieldBlue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 23, Short.MAX_VALUE))
+                        .addGap(0, 11, Short.MAX_VALUE))
         );
         pack();
         setLocationRelativeTo(getOwner());
@@ -343,6 +378,8 @@ public class MainGUI extends JFrame {
     private JTextField textFieldGreen;
     private JButton acceptButton;
     private JTextField textFieldBlue;
+    private JButton lightenButton;
+    private JButton darkerButton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
 

@@ -256,5 +256,53 @@ public class Histogram {
         }
         return maxGreen;
     }
+
+    public BufferedImage ligthen(BufferedImage image) {
+
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                Color color = new Color(image.getRGB(w, h));
+                int red = (int) (40 * Math.log(color.getRed() + 1));
+                int green = (int) (40 * Math.log(color.getGreen() + 1));
+                int blue = (int) (40 * Math.log(color.getBlue() + 1));
+                if (red > 255) {
+                    red = 255;
+                }
+                if (green > 255) {
+                    green = 255;
+                }
+                if (blue > 255) {
+                    blue = 255;
+                }
+                Color newColor = new Color(red, green, blue);
+                image.setRGB(w, h, newColor.getRGB());
+            }
+        }
+        return image;
+    }
+
+    public BufferedImage darker(BufferedImage image) {
+
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                Color color = new Color(image.getRGB(w, h));
+                int red = (int) (0.002 * Math.pow(color.getRed(), 2));
+                int green = (int) (0.002 * Math.pow(color.getGreen(), 2));
+                int blue = (int) (0.002 * Math.pow(color.getBlue(), 2));
+                if (red > 255) {
+                    red = 255;
+                }
+                if (green > 255) {
+                    green = 255;
+                }
+                if (blue > 255) {
+                    blue = 255;
+                }
+                Color newColor = new Color(red, green, blue);
+                image.setRGB(w, h, newColor.getRGB());
+            }
+        }
+        return image;
+    }
 }
 
