@@ -179,17 +179,22 @@ public class MainGUI extends JFrame {
     private void histogramStretchingMenuItemActionPerformed(ActionEvent e) {
         //red 0 green 1 blue 2
         Histogram histogram = new Histogram();
-        List<int[]> calculateHistograms = histogram.calculateHistograms(firstImage);
-        BufferedImage newImage;
-        //red
-        newImage = histogram.histogramStretching(copyImage(firstImage), 0);
-        histogram.displayOneType(newImage, 0);
-        //green
-        newImage = histogram.histogramStretching(copyImage(firstImage), 1);
-        histogram.displayOneType(newImage, 1);
-        //blue
-        newImage = histogram.histogramStretching(copyImage(firstImage), 2);
-        histogram.displayOneType(newImage, 2);
+//        List<int[]> calculateHistograms = histogram.calculateHistograms(firstImage);
+//        BufferedImage newImage;
+//        //red
+//        newImage = histogram.histogramStretching(copyImage(firstImage), 0);
+//        histogram.displayOneType(newImage, 0);
+//        //green
+//        newImage = histogram.histogramStretching(copyImage(firstImage), 1);
+//        histogram.displayOneType(newImage, 1);
+//        //blue
+//        newImage = histogram.histogramStretching(copyImage(firstImage), 2);
+//        histogram.displayOneType(newImage, 2);
+//        newImage = histogram.histogramStretching(copyImage(firstImage), 3);
+//        histogram.displayOneType(newImage, 3);
+        BufferedImage copyImage = copyImage(firstImage);
+        BufferedImage stretchingHistogram = histogram.stretchingHistogram(copyImage);
+        histogram.display(stretchingHistogram);
     }
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents

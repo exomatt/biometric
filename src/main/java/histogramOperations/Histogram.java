@@ -69,6 +69,9 @@ public class Histogram {
         if (type == 2) {
             paintHistogram(xTable, data.get(2), "BLUE", Color.BLUE, firstImage);
         }
+        if (type == 3) {
+            paintHistogram(xTable, data.get(3), "Gray", Color.GRAY, firstImage);
+        }
     }
 
     private void paintHistogram(int[] xTable, int[] data, String name, Color color, BufferedImage image) {
@@ -122,6 +125,9 @@ public class Histogram {
     private BufferedImage modifyImage(int[] lookUpTable, BufferedImage image, int type) {
         int width = image.getWidth();
         int height = image.getHeight();
+        int[] lookRed = lookUpTableHistogramStretching(image, 0);
+        int[] lookGreen = lookUpTableHistogramStretching(image, 1);
+        int[] lookBlue = lookUpTableHistogramStretching(image, 2);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Color color = new Color(image.getRGB(i, j));
@@ -134,10 +140,19 @@ public class Histogram {
                     int green = color.getGreen();
                     int newValue = lookUpTable[green];
                     image.setRGB(i, j, new Color(color.getRed(), newValue, color.getBlue()).getRGB());
-                } else {
+                } else if (type == 2) {
                     int blue = color.getBlue();
                     int newValue = lookUpTable[blue];
                     image.setRGB(i, j, new Color(color.getRed(), color.getGreen(), newValue).getRGB());
+                } else {
+                    int blue = color.getBlue();
+                    int green = color.getGreen();
+                    int red = color.getRed();
+
+                    int newValueRed = lookRed[red];
+                    int newValueBlue = lookBlue[blue];
+                    int newValueGreen = lookGreen[green];
+                    image.setRGB(i, j, new Color(newValueRed, newValueGreen, newValueBlue).getRGB());
                 }
             }
         }
@@ -146,11 +161,9 @@ public class Histogram {
 
     ///todo naprawic kurłą
     public BufferedImage histogramStretching(BufferedImage image, int type) {
-        List<int[]> calculateHistograms = calculateHistograms(image);
-
         int[] lookUpTableHistogramStretching = lookUpTableHistogramStretching(image, type);
         BufferedImage modifyImage = modifyImage(lookUpTableHistogramStretching, image, type);
-        return image;
+        return modifyImage;
     }
 
     public int[] lookUpTableHistogramStretching(BufferedImage image, int type) {
@@ -160,17 +173,88 @@ public class Histogram {
             table = calculateHistograms.get(0);
         } else if (type == 1) {
             table = calculateHistograms.get(1);
-        } else {
+        } else if (type == 2) {
             table = calculateHistograms.get(2);
+        } else {
+            table = calculateHistograms.get(3);
         }
         List<Integer> listHistogram = Arrays.stream(table).boxed().collect(Collectors.toList());
-        Integer min = Collections.min(listHistogram);
-        Integer max = Collections.max(listHistogram);
+        Integer min = 0;
+        Integer max = 255;
         int temp = max - min;
         for (int i = 0; i < table.length; i++) {
-            table[i] = ((table[i] - min) / temp) * 255;
+            int newValue = (int) ((table[i] - min) / (double) temp) * 255;
+            if (newValue > 255) {
+                newValue = 255;
+            }
+            table[i] = newValue;
         }
         return table;
+    }
+
+    public BufferedImage stretchingHistogram(BufferedImage image) {
+        List<int[]> calculateHistograms = calculateHistograms(image);
+        int[] reds = calculateHistograms.get(0);
+        int[] greens = calculateHistograms.get(1);
+        int[] blues = calculateHistograms.get(2);
+        List<Integer> listHistogramRed = Arrays.stream(reds).boxed().collect(Collectors.toList());
+        List<Integer> listHistogramGreen = Arrays.stream(greens).boxed().collect(Collectors.toList());
+        List<Integer> listHistogramBlue = Arrays.stream(blues).boxed().collect(Collectors.toList());
+        int minRed = 0;
+        int minGreen = 0;
+        int minBlue = 0;
+        for (int i = 0; i < listHistogramGreen.size(); i++) {
+            if (!listHistogramGreen.get(i).equals(0)) {
+                minGreen = i;
+                break;
+            }
+        }
+        for (int i = 0; i < listHistogramRed.size(); i++) {
+            if (!listHistogramRed.get(i).equals(0)) {
+                minRed = i;
+                break;
+            }
+        }
+        for (int i = 0; i < listHistogramBlue.size(); i++) {
+            if (!listHistogramBlue.get(i).equals(0)) {
+                minBlue = i;
+                break;
+            }
+        }
+        int maxRed = 0;
+        int maxGreen = 0;
+        int maxBlue = 0;
+        Collections.reverse(listHistogramBlue);
+        Collections.reverse(listHistogramGreen);
+        Collections.reverse(listHistogramRed);
+        maxGreen = getMax(listHistogramGreen);
+        maxRed = getMax(listHistogramRed);
+        maxBlue = getMax(listHistogramBlue);
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                Color color = new Color(image.getRGB(w, h));
+                int red = color.getRed();
+                int green = color.getGreen();
+                int blue = color.getBlue();
+                int newRed = (red - minRed) / (maxRed - minRed) * 255;
+                int newBlue = (green - minGreen) / (maxBlue - minBlue) * 255;
+                int newGreen = (blue - minBlue) / (maxGreen - minGreen) * 255;
+                Color newColor = new Color(newRed, newGreen, newBlue);
+                image.setRGB(w, h, newColor.getRGB());
+            }
+        }
+        return image;
+    }
+
+    private int getMax(List<Integer> listHistogram) {
+        int maxGreen = 0;
+        for (int i = 0; i < listHistogram.size(); i++) {
+            if (!listHistogram.get(i).equals(0)) {
+                maxGreen = 255 - i;
+                break;
+            }
+        }
+        return maxGreen;
     }
 }
 
