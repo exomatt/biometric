@@ -192,7 +192,11 @@ public class Histogram {
     private int[] getLUT(int[] histogram, int max, int min) {
         int[] lut = new int[256];
         for (int i = 0; i < histogram.length; i++) {
-            lut[i] = (int) ((i - min) * ((float) 255.0) / ((float) (max - min)));
+            int i1 = (int) ((i - min) * ((float) 255.0) / ((float) (max - min)));
+            if (i1 > 255) {
+                i1 = 255;
+            }
+            lut[i] = i1;
         }
         return lut;
     }

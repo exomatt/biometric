@@ -1,4 +1,3 @@
-import GUI.ImageGUI;
 import GUI.MainGUI;
 
 import javax.swing.*;
