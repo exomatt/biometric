@@ -1,4 +1,4 @@
-package ImageRS;
+package imageoperation;
 
 import jankovicsandras.imagetracer.ImageTracer;
 import lombok.extern.java.Log;
@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 
 @Log
 public class ImageReaderSaver {

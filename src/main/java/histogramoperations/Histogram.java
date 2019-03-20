@@ -1,4 +1,4 @@
-package histogramOperations;
+package histogramoperations;
 
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
@@ -195,6 +195,9 @@ public class Histogram {
             int i1 = (int) ((i - min) * ((float) 255.0) / ((float) (max - min)));
             if (i1 > 255) {
                 i1 = 255;
+            }
+            if (i1 < 0) {
+                i1 = 0;
             }
             lut[i] = i1;
         }

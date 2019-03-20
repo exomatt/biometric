@@ -4,8 +4,8 @@
 
 package GUI;
 
-import ImageRS.ImageReaderSaver;
-import histogramOperations.Histogram;
+import histogramoperations.Histogram;
+import imageoperation.ImageReaderSaver;
 import lombok.extern.java.Log;
 
 import javax.swing.*;
