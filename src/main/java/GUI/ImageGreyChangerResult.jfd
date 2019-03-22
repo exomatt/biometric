@@ -1,0 +1,49 @@
+JFDML JFormDesigner: "6.0.6.2.195" Java: "1.8.0_152-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :::p, par l:::p {seq {comp scrollPane1:::p:276:p, space :p:56:p, comp scrollPane5:::p:274:p}, seq t {comp scrollPane3:::p:276:p, space :::x, comp scrollPane6:::p:274:p}}, space ::73:x, comp scrollPane7:::p:274:p, space :p:49:p}}"
+			"$verticalGroup": "par l {seq l {space :::p, par t {comp scrollPane1:::p:227:p, comp scrollPane5:::p:225:p, comp scrollPane7::t:p:225:p}, space :p:29:p, par l {comp scrollPane6:::p:225:p, comp scrollPane3:::p:227:p}, space ::112:x}}"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelOriginal"
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane3"
+				add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+					name: "scrollPane4"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "labelBlue"
+					} )
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane5"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelRed"
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane6"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelAverange"
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane7"
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "labelGreen"
+				} )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 55, 35 )
+			"size": new java.awt.Dimension( 1010, 630 )
+		} )
+	}
+}

@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:69:p, par l {comp label2:::p::p, comp label1::l:p::p, par t:l::p {comp textFieldBlue::l::116:x, comp textFieldGreen::l::116:x}, seq l {par l {comp textFieldRed::l:p:121:p, seq l {comp label3:::p::p, space :p:83:p, comp acceptButton:::p::p}}, space :p:101:p, par l:::p {comp lightenButton::::144:x, comp darkerButton::::144:x}}}, space ::513:x}, seq l {comp scrollPane1:::p:600:p, space :0:423:x}}"
-			"$verticalGroup": "par l {seq l {comp scrollPane1:::p:400:p, space :p:30:p, comp label1:::p::p, space s:::p, par b {comp textFieldRed::b:p::p, comp lightenButton::b:p::p}, space :p:4:p, par b {comp label3::b:p::p, comp acceptButton::b:p::p, comp darkerButton::b:p::p}, space :::p, comp textFieldGreen:::p::p, space :::p, comp label2:::p::p, space :::p, comp textFieldBlue:::p::p, space :0:11:x}}"
+			"$horizontalGroup": "par l {seq l {comp scrollPane1:::p:600:p, space s:::p, par l {comp lightenButton::l:p:144:p, comp darkerButton::l:p:144:p}, space :p:85:p, par l {comp textFieldRed:::p:121:p, comp label1:::p::p, comp label3::l:p::p, comp textFieldGreen:::p:116:p, comp label2::l:p::p, comp textFieldBlue::l:p:116:p, comp acceptButton::l:p::p}, space :0:55:x}, seq {par l {seq {space :p:29:p, par l:::p {comp label4:::::x, comp tresholdTextField:::::x}}, seq l {space :p:51:p, comp thresholdCheckBox:::p:156:p}, seq l {space :p:93:p, comp makeBinarizationButton:::p::p}}, space ::793:x}}"
+			"$verticalGroup": "par l {seq l {par l {comp scrollPane1:::p:400:p, seq l {space :::p, par b {comp lightenButton::b:p::p, comp label1::b:p::p}, space :::p, par l {comp darkerButton:::p::p, comp textFieldRed::l:p::p}, space :::p, comp label3:::p::p, space :::p, comp textFieldGreen:::p::p, space :::p, comp label2:::p::p, space :::p, comp textFieldBlue:::p::p, space :::p, comp acceptButton:::p::p}}, space :p:27:p, comp label4:::p::p, space s:::p, comp tresholdTextField:::p::p, space :::p, comp thresholdCheckBox::::29:x, space s:::p, comp makeBinarizationButton:::p::p, space :p:61:p}}"
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -49,6 +49,22 @@ new FormModel {
 				"text": "darker"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "darkerButtonActionPerformed", true ) )
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label4"
+				"text": "Treshold parametr to binarization"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "tresholdTextField"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "makeBinarizationButton"
+				"text": "Make"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "makeBinarizationButtonActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "thresholdCheckBox"
+				"text": "setOnMainWindow"
+			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 				name: "menuBar1"
 				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
@@ -82,9 +98,38 @@ new FormModel {
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "histogramStretchingMenuItemActionPerformed", true ) )
 					} )
 				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu3"
+					"text": "change to gray "
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "redChangeMenuItem"
+						"text": "red change"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "redChangeMenuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "greenChangeMenuItem"
+						"text": "green change"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "greenChangeMenuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "blueChangeMenuItem"
+						"text": "blue change"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "blueChangeMenuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "averangeChangeMenuItem"
+						"text": "averange change"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "averangeChangeMenuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "menuItem4"
+						"text": "get all"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "menuItem4ActionPerformed", true ) )
+					} )
+				} )
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 5, 20 )
+			"location": new java.awt.Point( 0, 20 )
 			"size": new java.awt.Dimension( 1025, 690 )
 		} )
 	}

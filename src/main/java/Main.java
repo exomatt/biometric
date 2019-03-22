@@ -6,7 +6,7 @@ import java.awt.*;
 public class  Main {
     public static void main(String[] args) {
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -16,6 +16,11 @@ public class  Main {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+//        try {
+//            UIManager.setLookAndFeel (new MaterialLookAndFeel());
+//        } catch (UnsupportedLookAndFeelException e) {
+//            e.printStackTrace();
+//        }
         MainGUI mainGUI = new MainGUI();
         mainGUI.setMinimumSize(new Dimension(800,600));
         mainGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

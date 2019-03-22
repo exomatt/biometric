@@ -54,6 +54,13 @@
             <systemPath>${project.basedir}/src/main/resources/ImageTracer.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>material.ui</groupId>
+            <artifactId>material</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/material-ui-swing.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.knowm.xchart</groupId>
             <artifactId>xchart</artifactId>
             <version>3.5.4</version>

@@ -4,6 +4,8 @@
 
 package GUI;
 
+import binarization.BinarizationOperations;
+import binarization.ColorChanger;
 import histogramoperations.Histogram;
 import imageoperation.ImageReaderSaver;
 import lombok.extern.java.Log;
@@ -16,6 +18,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -139,7 +142,7 @@ public class MainGUI extends JFrame {
     }
 
     private void showHistogramButtonActionPerformed(ActionEvent e) {
-        if (firstImage==null){
+        if (firstImage == null) {
             return;
         }
         Histogram histogram = new Histogram();
@@ -155,21 +158,22 @@ public class MainGUI extends JFrame {
         //red
         int[] lookUpTable = histogram.lookUpTableHistogramEqualization(calculateHistograms.get(0), pixels);
         BufferedImage imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 0);
-        histogram.displayOneType(imageRedEq,0);
+        histogram.displayOneType(imageRedEq, 0);
         //green
         lookUpTable = histogram.lookUpTableHistogramEqualization(calculateHistograms.get(1), pixels);
         imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 1);
-        histogram.displayOneType(imageRedEq,1);
+        histogram.displayOneType(imageRedEq, 1);
         //blue
         lookUpTable = histogram.lookUpTableHistogramEqualization(calculateHistograms.get(2), pixels);
         imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 2);
-        histogram.displayOneType(imageRedEq,2);
+        histogram.displayOneType(imageRedEq, 2);
         //all
         imageRedEq = histogram.histogramEqualization(lookUpTable, copyImage(firstImage), 3);
         histogram.displayOneType(imageRedEq, 3);
 
     }
-    private static BufferedImage copyImage(BufferedImage source){
+
+    private static BufferedImage copyImage(BufferedImage source) {
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
         Graphics g = b.getGraphics();
         g.drawImage(source, 0, 0, null);
@@ -200,6 +204,77 @@ public class MainGUI extends JFrame {
         firstImage = darker;
         imageLabel.setIcon(new ImageIcon(firstImage));
     }
+
+    private void redChangeMenuItemActionPerformed(ActionEvent e) {
+        ColorChanger changer = new ColorChanger();
+        firstImage = changer.changeToGrey(firstImage, 0);
+        imageLabel.setIcon(new ImageIcon(firstImage));
+    }
+
+    private void greenChangeMenuItemActionPerformed(ActionEvent e) {
+        ColorChanger changer = new ColorChanger();
+        firstImage = changer.changeToGrey(firstImage, 1);
+        imageLabel.setIcon(new ImageIcon(firstImage));
+    }
+
+    private void blueChangeMenuItemActionPerformed(ActionEvent e) {
+        ColorChanger changer = new ColorChanger();
+        firstImage = changer.changeToGrey(firstImage, 2);
+        imageLabel.setIcon(new ImageIcon(firstImage));
+    }
+
+    private void averangeChangeMenuItemActionPerformed(ActionEvent e) {
+        ColorChanger changer = new ColorChanger();
+        firstImage = changer.changeToGrey(firstImage, 3);
+        imageLabel.setIcon(new ImageIcon(firstImage));
+    }
+
+    private void menuItem4ActionPerformed(ActionEvent e) {
+        ColorChanger changer = new ColorChanger();
+        BufferedImage imageRed = changer.changeToGrey(copyImage(firstImage), 0);
+        BufferedImage imageGreen = changer.changeToGrey(copyImage(firstImage), 1);
+        BufferedImage imageBlue = changer.changeToGrey(copyImage(firstImage), 2);
+        BufferedImage imageAverage = changer.changeToGrey(copyImage(firstImage), 3);
+        List<BufferedImage> bufferedImages = new ArrayList<>();
+        bufferedImages.add(firstImage);
+        bufferedImages.add(imageRed);
+        bufferedImages.add(imageGreen);
+        bufferedImages.add(imageBlue);
+        bufferedImages.add(imageAverage);
+        ImageGreyChangerResult changerResultDisplay = new ImageGreyChangerResult(bufferedImages);
+        changerResultDisplay.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        changerResultDisplay.setVisible(true);
+    }
+
+    private void makeBinarizationButtonActionPerformed(ActionEvent e) {
+        BinarizationOperations binarizationOperations = new BinarizationOperations();
+        String textThreshold = tresholdTextField.getText();
+        if (textThreshold.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Threshold field is empty!!", ERROR, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int threshold = 0;
+        try {
+            threshold = Integer.parseInt(textThreshold);
+        } catch (NumberFormatException ex) {
+            log.severe("Text is not a number in threshold input error:  " + ex.getMessage() + Arrays.toString(ex.getStackTrace()));
+            JOptionPane.showMessageDialog(null, "Threshold field should be a number!!", ERROR, JOptionPane.ERROR_MESSAGE);
+        }
+        if (threshold < 0 || threshold > 255) {
+            JOptionPane.showMessageDialog(null, "Threshold field should be a number between 0 and 255!!", ERROR, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        BufferedImage binarizationImage = binarizationOperations.userValueBinarization(copyImage(firstImage), threshold);
+        if (thresholdCheckBox.isSelected()) {
+            imageLabel.setIcon(new ImageIcon(binarizationImage));
+            firstImage = binarizationImage;
+        } else {
+            ImageShow imageShow = new ImageShow(binarizationImage);
+            imageShow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            imageShow.setVisible(true);
+        }
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -211,6 +286,12 @@ public class MainGUI extends JFrame {
         showHistogramButton = new JMenuItem();
         histogramEqualizationMenuItem = new JMenuItem();
         histogramStretchingMenuItem = new JMenuItem();
+        menu3 = new JMenu();
+        redChangeMenuItem = new JMenuItem();
+        greenChangeMenuItem = new JMenuItem();
+        blueChangeMenuItem = new JMenuItem();
+        averangeChangeMenuItem = new JMenuItem();
+        menuItem4 = new JMenuItem();
         scrollPane1 = new JScrollPane();
         imageLabel = new JLabel();
         label1 = new JLabel();
@@ -222,6 +303,10 @@ public class MainGUI extends JFrame {
         textFieldBlue = new JTextField();
         lightenButton = new JButton();
         darkerButton = new JButton();
+        label4 = new JLabel();
+        tresholdTextField = new JTextField();
+        makeBinarizationButton = new JButton();
+        thresholdCheckBox = new JCheckBox();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -263,6 +348,37 @@ public class MainGUI extends JFrame {
                 menu2.add(histogramStretchingMenuItem);
             }
             menuBar1.add(menu2);
+
+            //======== menu3 ========
+            {
+                menu3.setText("change to gray ");
+
+                //---- redChangeMenuItem ----
+                redChangeMenuItem.setText("red change");
+                redChangeMenuItem.addActionListener(e -> redChangeMenuItemActionPerformed(e));
+                menu3.add(redChangeMenuItem);
+
+                //---- greenChangeMenuItem ----
+                greenChangeMenuItem.setText("green change");
+                greenChangeMenuItem.addActionListener(e -> greenChangeMenuItemActionPerformed(e));
+                menu3.add(greenChangeMenuItem);
+
+                //---- blueChangeMenuItem ----
+                blueChangeMenuItem.setText("blue change");
+                blueChangeMenuItem.addActionListener(e -> blueChangeMenuItemActionPerformed(e));
+                menu3.add(blueChangeMenuItem);
+
+                //---- averangeChangeMenuItem ----
+                averangeChangeMenuItem.setText("averange change");
+                averangeChangeMenuItem.addActionListener(e -> averangeChangeMenuItemActionPerformed(e));
+                menu3.add(averangeChangeMenuItem);
+
+                //---- menuItem4 ----
+                menuItem4.setText("get all");
+                menuItem4.addActionListener(e -> menuItem4ActionPerformed(e));
+                menu3.add(menuItem4);
+            }
+            menuBar1.add(menu3);
         }
         setJMenuBar(menuBar1);
 
@@ -291,56 +407,84 @@ public class MainGUI extends JFrame {
         darkerButton.setText("darker");
         darkerButton.addActionListener(e -> darkerButtonActionPerformed(e));
 
+        //---- label4 ----
+        label4.setText("Treshold parametr to binarization");
+
+        //---- makeBinarizationButton ----
+        makeBinarizationButton.setText("Make");
+        makeBinarizationButton.addActionListener(e -> makeBinarizationButtonActionPerformed(e));
+
+        //---- thresholdCheckBox ----
+        thresholdCheckBox.setText("setOnMainWindow");
+
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addGap(69, 69, 69)
+                        .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(contentPaneLayout.createParallelGroup()
+                                .addComponent(lightenButton, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(darkerButton, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+                        .addGap(85, 85, 85)
                     .addGroup(contentPaneLayout.createParallelGroup()
-                        .addComponent(label2)
+                            .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
                             .addComponent(label1)
-                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(textFieldBlue, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                                    .addComponent(textFieldGreen, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
-                            .addGroup(contentPaneLayout.createSequentialGroup()
-                                    .addGroup(contentPaneLayout.createParallelGroup()
-                                            .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(contentPaneLayout.createSequentialGroup()
-                                                    .addComponent(label3)
-                                                    .addGap(83, 83, 83)
-                                                    .addComponent(acceptButton)))
-                                    .addGap(101, 101, 101)
-                                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(lightenButton, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                                            .addComponent(darkerButton, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))))
-                        .addContainerGap(513, Short.MAX_VALUE))
-                .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 423, Short.MAX_VALUE))
+                            .addComponent(label3)
+                            .addComponent(textFieldGreen, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(label2)
+                            .addComponent(textFieldBlue, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(acceptButton))
+                        .addGap(0, 55, Short.MAX_VALUE))
+                    .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addGroup(contentPaneLayout.createParallelGroup()
+                                    .addGroup(contentPaneLayout.createSequentialGroup()
+                                            .addGap(29, 29, 29)
+                                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(label4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(tresholdTextField)))
+                                    .addGroup(contentPaneLayout.createSequentialGroup()
+                                            .addGap(51, 51, 51)
+                                            .addComponent(thresholdCheckBox, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(contentPaneLayout.createSequentialGroup()
+                                            .addGap(93, 93, 93)
+                                            .addComponent(makeBinarizationButton)))
+                            .addContainerGap(793, Short.MAX_VALUE))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
-                    .addGap(30, 30, 30)
-                    .addComponent(label1)
+                        .addGroup(contentPaneLayout.createParallelGroup()
+                                .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
+                                .addGroup(contentPaneLayout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addComponent(lightenButton)
+                                                .addComponent(label1))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(contentPaneLayout.createParallelGroup()
+                                                .addComponent(darkerButton)
+                                                .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(label3)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(textFieldGreen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(label2)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(textFieldBlue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(acceptButton)))
+                        .addGap(27, 27, 27)
+                        .addComponent(label4)
                         .addGap(18, 18, 18)
-                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(textFieldRed, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lightenButton))
-                    .addGap(4, 4, 4)
-                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(label3)
-                            .addComponent(acceptButton)
-                            .addComponent(darkerButton))
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(textFieldGreen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(label2)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(textFieldBlue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 11, Short.MAX_VALUE))
+                        .addComponent(tresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(thresholdCheckBox, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(makeBinarizationButton)
+                        .addGap(61, 61, 61))
         );
         pack();
         setLocationRelativeTo(getOwner());
@@ -357,6 +501,12 @@ public class MainGUI extends JFrame {
     private JMenuItem showHistogramButton;
     private JMenuItem histogramEqualizationMenuItem;
     private JMenuItem histogramStretchingMenuItem;
+    private JMenu menu3;
+    private JMenuItem redChangeMenuItem;
+    private JMenuItem greenChangeMenuItem;
+    private JMenuItem blueChangeMenuItem;
+    private JMenuItem averangeChangeMenuItem;
+    private JMenuItem menuItem4;
     private JScrollPane scrollPane1;
     private JLabel imageLabel;
     private JLabel label1;
@@ -368,6 +518,10 @@ public class MainGUI extends JFrame {
     private JTextField textFieldBlue;
     private JButton lightenButton;
     private JButton darkerButton;
+    private JLabel label4;
+    private JTextField tresholdTextField;
+    private JButton makeBinarizationButton;
+    private JCheckBox thresholdCheckBox;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
 
