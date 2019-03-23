@@ -275,6 +275,15 @@ public class MainGUI extends JFrame {
         }
     }
 
+    private void otsuMenuItemActionPerformed(ActionEvent e) {
+        BinarizationOperations binarizationOperations = new BinarizationOperations();
+        int otsuThreshold = binarizationOperations.otsuThreshold(copyImage(firstImage));
+        BufferedImage image = binarizationOperations.userValueBinarization(copyImage(firstImage), otsuThreshold);
+        ImageShow imageShow = new ImageShow(image, otsuThreshold);
+        imageShow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        imageShow.setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -292,6 +301,8 @@ public class MainGUI extends JFrame {
         blueChangeMenuItem = new JMenuItem();
         averangeChangeMenuItem = new JMenuItem();
         menuItem4 = new JMenuItem();
+        menu4 = new JMenu();
+        otsuMenuItem = new JMenuItem();
         scrollPane1 = new JScrollPane();
         imageLabel = new JLabel();
         label1 = new JLabel();
@@ -379,6 +390,17 @@ public class MainGUI extends JFrame {
                 menu3.add(menuItem4);
             }
             menuBar1.add(menu3);
+
+            //======== menu4 ========
+            {
+                menu4.setText("binarization");
+
+                //---- otsuMenuItem ----
+                otsuMenuItem.setText("otsu");
+                otsuMenuItem.addActionListener(e -> otsuMenuItemActionPerformed(e));
+                menu4.add(otsuMenuItem);
+            }
+            menuBar1.add(menu4);
         }
         setJMenuBar(menuBar1);
 
@@ -507,6 +529,8 @@ public class MainGUI extends JFrame {
     private JMenuItem blueChangeMenuItem;
     private JMenuItem averangeChangeMenuItem;
     private JMenuItem menuItem4;
+    private JMenu menu4;
+    private JMenuItem otsuMenuItem;
     private JScrollPane scrollPane1;
     private JLabel imageLabel;
     private JLabel label1;

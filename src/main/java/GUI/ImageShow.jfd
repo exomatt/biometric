@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:171:p, comp scrollPane1:::p:503:p, space ::249:x}}"
-			"$verticalGroup": "par l {seq t {space ::31:x, comp scrollPane1:::p:353:p, space :p:22:p}}"
+			"$horizontalGroup": "par l {seq l {space :p:171:p, comp scrollPane1:::p:503:p, space :p:64:p, par l:::p {comp thresholdTextlabel::::113:x, comp thresholdLabel::::113:x}, space ::72:x}}"
+			"$verticalGroup": "par l {seq t {space ::31:x, comp scrollPane1:::p:353:p, space :p:22:p}, seq l {space :p:66:p, comp thresholdTextlabel:::p:37:p, space :::p, comp thresholdLabel:::p:45:p, space ::252:x}}"
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -13,6 +13,12 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "labelImage"
 				} )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "thresholdTextlabel"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "thresholdLabel"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 5, 5 )
