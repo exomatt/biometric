@@ -277,7 +277,7 @@ public class MainGUI extends JFrame {
 
     private void otsuMenuItemActionPerformed(ActionEvent e) {
         BinarizationOperations binarizationOperations = new BinarizationOperations();
-        int otsuThreshold = binarizationOperations.otsuThreshold(copyImage(firstImage));
+        int otsuThreshold = binarizationOperations.thresholdOtsu(copyImage(firstImage));
         BufferedImage image = binarizationOperations.userValueBinarization(copyImage(firstImage), otsuThreshold);
         ImageShow imageShow = new ImageShow(image, otsuThreshold);
         imageShow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
