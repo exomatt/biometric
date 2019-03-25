@@ -196,38 +196,4 @@ public class BinarizationOperations {
 
         return Math.sqrt(temp / list.size());
     }
-
-    public BufferedImage niblack2(BufferedImage image, double userTreshold, int windowSize) {
-        int threshold[][] = new int[image.getWidth()][image.getHeight()];
-
-        for (int w = 0; w < image.getWidth(); w++) {
-            for (int h = 0; h < image.getHeight(); h++) {
-                List<Integer> list = new ArrayList<>();
-                int value;
-                for (int i = w - windowSize / 2; i < w + (windowSize / 2); i++) {
-                    if (i > 0 && i < image.getWidth()) {
-                        for (int j = h - windowSize / 2; j < h + (windowSize / 2); j++) {
-                            if (j > 0 && j < image.getHeight()) {
-                                value = new Color(image.getRGB(i, j)).getRed();
-                                list.add(value);
-                            }
-                        }
-                    }
-                }
-                IntSummaryStatistics intSummaryStatistics = list.stream().mapToInt(Integer::intValue).summaryStatistics();
-                double average = intSummaryStatistics.getAverage();
-                double sd = standDev(list, average);
-                threshold[w][h] = (int) (average + userTreshold * sd);
-            }
-        }
-        for (int w = 0; w < image.getWidth(); w++) {
-            for (int h = 0; h < image.getHeight(); h++) {
-                Color c = new Color(image.getRGB(w, h));
-                if (c.getRed() >= threshold[w][h]) image.setRGB(w, h, Color.WHITE.getRGB());
-                else image.setRGB(w, h, Color.BLACK.getRGB());
-            }
-        }
-        return image;
-    }
 }
-
