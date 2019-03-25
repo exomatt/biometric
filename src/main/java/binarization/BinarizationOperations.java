@@ -2,6 +2,9 @@ package binarization;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class BinarizationOperations {
     public BufferedImage userValueBinarization(BufferedImage img, int threshold) {
@@ -15,8 +18,67 @@ public class BinarizationOperations {
         return img;
     }
 
-    public BufferedImage bersenBinarization(BufferedImage img, int threshold, int windowSize) {
-        return null;
+    public BufferedImage bersenBinarization(BufferedImage image, int contrast_threshold, int set_threshold) {
+        int contrast[][] = new int[image.getWidth()][image.getHeight()];
+        int midgray[][] = new int[image.getWidth()][image.getHeight()];
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                List<Integer> list = new ArrayList<>();
+                int value;
+                if (w != 0) {
+                    value = new Color(image.getRGB(w - 1, h)).getRed();
+                    list.add(value);
+                    if (h != image.getHeight() - 1) {
+                        value = new Color(image.getRGB(w - 1, h + 1)).getRed();
+                        list.add(value);
+                    }
+                }
+                if (h != 0) {
+                    value = new Color(image.getRGB(w, h - 1)).getRed();
+                    list.add(value);
+                    if (w != image.getWidth() - 1) {
+                        value = new Color(image.getRGB(w + 1, h - 1)).getRed();
+                        list.add(value);
+                    }
+                }
+                if (w != 0 && h != 0) {
+                    value = new Color(image.getRGB(w - 1, h - 1)).getRed();
+                    list.add(value);
+                }
+                if (w != image.getWidth() - 1 && h != image.getHeight() - 1) {
+                    value = new Color(image.getRGB(w + 1, h + 1)).getRed();
+                    list.add(value);
+                }
+                if (w != image.getWidth() - 1) {
+                    value = new Color(image.getRGB(w + 1, h)).getRed();
+                    list.add(value);
+                }
+                if (h != image.getHeight() - 1) {
+                    value = new Color(image.getRGB(w, h + 1)).getRed();
+                    list.add(value);
+                }
+                Integer max = Collections.max(list);
+                Integer min = Collections.min(list);
+                midgray[w][h] = (min + max) / 2;
+                contrast[w][h] = (max - min) / 2;
+            }
+        }
+        int black = Color.black.getRGB();
+        int white = Color.white.getRGB();
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                System.out.println(contrast[w][h]);
+                System.out.println(midgray[w][h]);
+                if (contrast[w][h] < contrast_threshold) {
+                    image.setRGB(w, h, midgray[w][h] >= set_threshold ? white : black);
+                } else {
+                    image.setRGB(w, h, new Color(image.getRGB(w, h)).getRed() >= midgray[w][h] ? white : black);
+                }
+            }
+        }
+
+
+        return image;
     }
 
     public int thresholdOtsu(BufferedImage image) {

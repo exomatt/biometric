@@ -284,6 +284,33 @@ public class MainGUI extends JFrame {
         imageShow.setVisible(true);
     }
 
+    private void button1ActionPerformed(ActionEvent e) {
+        String bersenTresholdTextFieldText = bersenTresholdTextField.getText();
+        String setThresholdBersenTextFieldText = setThresholdBersenTextField.getText();
+        if (bersenTresholdTextFieldText.isEmpty() || setThresholdBersenTextFieldText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Some field is empty!!", ERROR, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int contrast = 0;
+        int threshold = 0;
+        try {
+            contrast = Integer.parseInt(bersenTresholdTextFieldText);
+            threshold = Integer.parseInt(setThresholdBersenTextFieldText);
+        } catch (NumberFormatException ex) {
+            log.severe("Text is not a number in  input error:  " + ex.getMessage() + Arrays.toString(ex.getStackTrace()));
+            JOptionPane.showMessageDialog(null, "Threshold field should be a number!!", ERROR, JOptionPane.ERROR_MESSAGE);
+        }
+        if (threshold < 0 || threshold > 255 || contrast < 0 || contrast > 255) {
+            JOptionPane.showMessageDialog(null, "Threshold field should be a number between 0 and 255!!", ERROR, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        BinarizationOperations binarizationOperations = new BinarizationOperations();
+        BufferedImage image = binarizationOperations.bersenBinarization(copyImage(firstImage), contrast, threshold);
+        ImageShow imageShow = new ImageShow(image);
+        imageShow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        imageShow.setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -318,6 +345,12 @@ public class MainGUI extends JFrame {
         tresholdTextField = new JTextField();
         makeBinarizationButton = new JButton();
         thresholdCheckBox = new JCheckBox();
+        label5 = new JLabel();
+        label6 = new JLabel();
+        bersenTresholdTextField = new JTextField();
+        label7 = new JLabel();
+        setThresholdBersenTextField = new JTextField();
+        button1 = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -439,6 +472,19 @@ public class MainGUI extends JFrame {
         //---- thresholdCheckBox ----
         thresholdCheckBox.setText("setOnMainWindow");
 
+        //---- label5 ----
+        label5.setText("Bernsen binarization");
+
+        //---- label6 ----
+        label6.setText("threshold");
+
+        //---- label7 ----
+        label7.setText("set_treshold parametr");
+
+        //---- button1 ----
+        button1.setText("make");
+        button1.addActionListener(e -> button1ActionPerformed(e));
+
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
@@ -463,16 +509,31 @@ public class MainGUI extends JFrame {
                             .addGroup(contentPaneLayout.createParallelGroup()
                                     .addGroup(contentPaneLayout.createSequentialGroup()
                                             .addGap(29, 29, 29)
-                                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(label4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(tresholdTextField)))
+                                            .addGroup(contentPaneLayout.createParallelGroup()
+                                                    .addGroup(contentPaneLayout.createSequentialGroup()
+                                                            .addGroup(contentPaneLayout.createParallelGroup()
+                                                                    .addComponent(label4)
+                                                                    .addComponent(tresholdTextField))
+                                                            .addGap(213, 213, 213))
+                                                    .addGroup(contentPaneLayout.createSequentialGroup()
+                                                            .addGap(6, 6, 6)
+                                                            .addComponent(thresholdCheckBox, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                     .addGroup(contentPaneLayout.createSequentialGroup()
-                                            .addGap(51, 51, 51)
-                                            .addComponent(thresholdCheckBox, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(contentPaneLayout.createSequentialGroup()
-                                            .addGap(93, 93, 93)
-                                            .addComponent(makeBinarizationButton)))
-                            .addContainerGap(793, Short.MAX_VALUE))
+                                            .addGap(81, 81, 81)
+                                            .addComponent(makeBinarizationButton)
+                                            .addGap(284, 284, 284)))
+                            .addGroup(contentPaneLayout.createParallelGroup()
+                                    .addComponent(label5, GroupLayout.PREFERRED_SIZE, 188, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(label6)
+                                    .addComponent(bersenTresholdTextField, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(label7)
+                                    .addComponent(setThresholdBersenTextField, GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE))
+                            .addContainerGap(392, Short.MAX_VALUE))
+                    .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                            .addGap(0, 477, Short.MAX_VALUE)
+                            .addComponent(button1)
+                            .addGap(468, 468, 468))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
@@ -498,15 +559,31 @@ public class MainGUI extends JFrame {
                                         .addComponent(textFieldBlue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(acceptButton)))
-                        .addGap(27, 27, 27)
-                        .addComponent(label4)
-                        .addGap(18, 18, 18)
-                        .addComponent(tresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(thresholdCheckBox, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(makeBinarizationButton)
-                        .addGap(61, 61, 61))
+                        .addGroup(contentPaneLayout.createParallelGroup()
+                                .addGroup(contentPaneLayout.createSequentialGroup()
+                                        .addGap(30, 30, 30)
+                                        .addComponent(label4)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(thresholdCheckBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(makeBinarizationButton)
+                                        .addGap(87, 87, 87))
+                                .addGroup(contentPaneLayout.createSequentialGroup()
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(label5, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(label6)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bersenTresholdTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(label7)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(setThresholdBersenTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(button1)
+                                        .addContainerGap(37, Short.MAX_VALUE))))
         );
         pack();
         setLocationRelativeTo(getOwner());
@@ -546,6 +623,12 @@ public class MainGUI extends JFrame {
     private JTextField tresholdTextField;
     private JButton makeBinarizationButton;
     private JCheckBox thresholdCheckBox;
+    private JLabel label5;
+    private JLabel label6;
+    private JTextField bersenTresholdTextField;
+    private JLabel label7;
+    private JTextField setThresholdBersenTextField;
+    private JButton button1;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
 

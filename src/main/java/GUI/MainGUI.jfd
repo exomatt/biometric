@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {comp scrollPane1:::p:600:p, space s:::p, par l {comp lightenButton::l:p:144:p, comp darkerButton::l:p:144:p}, space :p:85:p, par l {comp textFieldRed:::p:121:p, comp label1:::p::p, comp label3::l:p::p, comp textFieldGreen:::p:116:p, comp label2::l:p::p, comp textFieldBlue::l:p:116:p, comp acceptButton::l:p::p}, space :0:55:x}, seq {par l {seq {space :p:29:p, par l:::p {comp label4:::::x, comp tresholdTextField:::::x}}, seq l {space :p:51:p, comp thresholdCheckBox:::p:156:p}, seq l {space :p:93:p, comp makeBinarizationButton:::p::p}}, space ::793:x}}"
-			"$verticalGroup": "par l {seq l {par l {comp scrollPane1:::p:400:p, seq l {space :::p, par b {comp lightenButton::b:p::p, comp label1::b:p::p}, space :::p, par l {comp darkerButton:::p::p, comp textFieldRed::l:p::p}, space :::p, comp label3:::p::p, space :::p, comp textFieldGreen:::p::p, space :::p, comp label2:::p::p, space :::p, comp textFieldBlue:::p::p, space :::p, comp acceptButton:::p::p}}, space :p:27:p, comp label4:::p::p, space s:::p, comp tresholdTextField:::p::p, space :::p, comp thresholdCheckBox::::29:x, space s:::p, comp makeBinarizationButton:::p::p, space :p:61:p}}"
+			"$horizontalGroup": "par l {seq l {comp scrollPane1:::p:600:p, space s:::p, par l {comp lightenButton::l:p:144:p, comp darkerButton::l:p:144:p}, space :p:85:p, par l {comp textFieldRed:::p:121:p, comp label1:::p::p, comp label3::l:p::p, comp textFieldGreen:::p:116:p, comp label2::l:p::p, comp textFieldBlue::l:p:116:p, comp acceptButton::l:p::p}, space :0:55:x}, seq {par l {seq l {space :p:29:p, par l {seq {par l {comp label4:::p::p, comp tresholdTextField::l:::x}, space :p:213:p}, seq l {space :6:6:p, comp thresholdCheckBox:::p:156:p, space :::x}}}, seq l {space :p:81:p, comp makeBinarizationButton:::p::p, space :p:284:p}}, par l {comp label5::l:p:188:p, comp label6::l:p::p, comp bersenTresholdTextField:::p:165:p, comp label7::l:p::p, comp setThresholdBersenTextField:::p:159:p}, space ::392:x}, seq t {space :0:477:x, comp button1:::p::p, space :p:468:p}}"
+			"$verticalGroup": "par l {seq l {par l {comp scrollPane1:::p:400:p, seq l {space :::p, par b {comp lightenButton::b:p::p, comp label1::b:p::p}, space :::p, par l {comp darkerButton:::p::p, comp textFieldRed::l:p::p}, space :::p, comp label3:::p::p, space :::p, comp textFieldGreen:::p::p, space :::p, comp label2:::p::p, space :::p, comp textFieldBlue:::p::p, space :::p, comp acceptButton:::p::p}}, par l {seq l {space :p:30:p, comp label4:::p::p, space :::p, comp tresholdTextField:::p::p, space :::p, comp thresholdCheckBox:::::x, space :::p, comp makeBinarizationButton:::p::p, space :p:87:p}, seq l {space :::p, comp label5:::p:26:p, space :::p, comp label6:::p::p, space :::p, comp bersenTresholdTextField:::p::p, space u:::p, comp label7:::p::p, space u:::p, comp setThresholdBersenTextField:::p::p, space :::p, comp button1:::p::p, space ::37:x}}}}"
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -64,6 +64,29 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
 				name: "thresholdCheckBox"
 				"text": "setOnMainWindow"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label5"
+				"text": "Bernsen binarization"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label6"
+				"text": "threshold"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "bersenTresholdTextField"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label7"
+				"text": "set_treshold parametr"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "setThresholdBersenTextField"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button1"
+				"text": "make"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "button1ActionPerformed", true ) )
 			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 				name: "menuBar1"
@@ -138,7 +161,7 @@ new FormModel {
 				} )
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 20 )
+			"location": new java.awt.Point( 0, 15 )
 			"size": new java.awt.Dimension( 1025, 690 )
 		} )
 	}
