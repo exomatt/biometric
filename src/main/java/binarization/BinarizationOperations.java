@@ -11,8 +11,8 @@ public class BinarizationOperations {
         for (int w = 0; w < img.getWidth(); w++) {
             for (int h = 0; h < img.getHeight(); h++) {
                 Color c = new Color(img.getRGB(w, h));
-                if (c.getRed() >= threshold) img.setRGB(w, h, Color.BLACK.getRGB());
-                else img.setRGB(w, h, Color.WHITE.getRGB());
+                if (c.getRed() >= threshold) img.setRGB(w, h, Color.WHITE.getRGB());
+                else img.setRGB(w, h, Color.BLACK.getRGB());
             }
         }
         return img;
@@ -67,8 +67,6 @@ public class BinarizationOperations {
         int white = Color.white.getRGB();
         for (int w = 0; w < image.getWidth(); w++) {
             for (int h = 0; h < image.getHeight(); h++) {
-                System.out.println(contrast[w][h]);
-                System.out.println(midgray[w][h]);
                 if (contrast[w][h] < contrast_threshold) {
                     image.setRGB(w, h, midgray[w][h] >= set_threshold ? white : black);
                 } else {
@@ -77,11 +75,43 @@ public class BinarizationOperations {
             }
         }
 
-
         return image;
     }
 
     public int thresholdOtsu(BufferedImage image) {
+        int[] pixels = getPixels(image);
+
+        int threshold = 0;
+        double maxVariance = 0;
+        for (int i = 0; i < 256; i++) {
+            double foregroundGrey = 0;
+            double backgroundGrey = 0;
+            double foreground = 0;
+            double background = 0;
+            for (int j = 0; j < pixels.length; j++) {
+                if (pixels[j] < i) {
+                    foregroundGrey = foregroundGrey + pixels[j];
+                    foreground++;
+                } else {
+                    backgroundGrey = backgroundGrey + pixels[j];
+                    background++;
+                }
+            }
+            double grey = (foregroundGrey + backgroundGrey) / pixels.length;
+            foregroundGrey = foregroundGrey / foreground;
+            backgroundGrey = backgroundGrey / background;
+            foreground = foreground / pixels.length;
+            background = background / pixels.length;
+            double variance = foreground * (Math.pow(foregroundGrey - grey, 2) + background * (Math.pow(backgroundGrey - grey, 2)));
+            if (variance > maxVariance) {
+                maxVariance = variance;
+                threshold = i;
+            }
+        }
+        return threshold;
+    }
+
+    private int[] getPixels(BufferedImage image) {
         int[] pixels = new int[image.getWidth() * image.getHeight()];
         int temp = 0;
         for (int w = 0; w < image.getWidth(); w++) {
@@ -90,35 +120,7 @@ public class BinarizationOperations {
                 temp++;
             }
         }
-
-        int threshold = 0;
-        double maxVariance = 0;
-        for (int i = 0; i < 256; i++) {
-            double targetGrey = 0;
-            double bgGrey = 0;
-            double target = 0;
-            double bg = 0;
-            for (int j = 0; j < pixels.length; j++) {
-                if (pixels[j] < i) {
-                    targetGrey = targetGrey + pixels[j];
-                    target++;
-                } else {
-                    bgGrey = bgGrey + pixels[j];
-                    bg++;
-                }
-            }
-            double grey = (targetGrey + bgGrey) / pixels.length;
-            targetGrey = targetGrey / target;
-            bgGrey = bgGrey / bg;
-            target = target / pixels.length;
-            bg = bg / pixels.length;
-            double variance = target * (Math.pow(targetGrey - grey, 2) + bg * (Math.pow(bgGrey - grey, 2)));
-            if (variance > maxVariance) {
-                maxVariance = variance;
-                threshold = i;
-            }
-        }
-        return threshold;
+        return pixels;
     }
 
 }
