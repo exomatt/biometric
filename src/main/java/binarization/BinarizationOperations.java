@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 
 public class BinarizationOperations {
@@ -123,4 +124,110 @@ public class BinarizationOperations {
         return pixels;
     }
 
+    public BufferedImage niblack(BufferedImage image, double userTreshold, int windowSize) {
+        int threshold[][] = new int[image.getWidth()][image.getHeight()];
+
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                List<Integer> list = new ArrayList<>();
+                int value;
+                for (int i = 0; i < (windowSize / 2) + 1; i++) {
+                    int w1 = w + i;
+                    int w2 = w - i;
+                    for (int j = 0; j < (windowSize / 2) + 1; j++) {
+                        int h1 = h + j;
+                        int h2 = h - j;
+                        if (i == 0 && j == 0)
+                            continue;
+                        if (w1 < image.getWidth() - 1) {
+                            if (h1 < image.getHeight() - 1) {
+                                value = new Color(image.getRGB(w1, h1)).getRed();
+                                list.add(value);
+                                if (w2 > 0) {
+                                    value = new Color(image.getRGB(w2, h1)).getRed();
+                                    list.add(value);
+                                }
+                            }
+                        }
+                        if (w2 > 0) {
+                            if (h2 > 0) {
+                                value = new Color(image.getRGB(w2, h2)).getRed();
+                                list.add(value);
+                            }
+                            if (h1 < image.getHeight() - 1) {
+                                value = new Color(image.getRGB(w2, h1)).getRed();
+                                list.add(value);
+                            }
+                        }
+
+                        if (w2 > 0 && h2 > 0) {
+                            value = new Color(image.getRGB(w2, h2)).getRed();
+                            list.add(value);
+                        }
+                        if (w1 < image.getWidth() - 1 && h1 < image.getHeight() - 1) {
+                            value = new Color(image.getRGB(w1, h1)).getRed();
+                            list.add(value);
+
+                        }
+                    }
+                }
+                IntSummaryStatistics intSummaryStatistics = list.stream().mapToInt(Integer::intValue).summaryStatistics();
+                double average = intSummaryStatistics.getAverage();
+                double sd = standDev(list, average);
+                threshold[w][h] = (int) (average + userTreshold * sd);
+            }
+
+        }
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                Color c = new Color(image.getRGB(w, h));
+                if (c.getRed() >= threshold[w][h]) image.setRGB(w, h, Color.WHITE.getRGB());
+                else image.setRGB(w, h, Color.BLACK.getRGB());
+            }
+        }
+        return image;
+    }
+
+    private double standDev(List<Integer> list, double average) {
+        double temp = 0;
+        for (int i = 0; i < list.size(); i++) {
+            temp += Math.pow((list.get(i) - average), 2);
+        }
+
+        return Math.sqrt(temp / list.size());
+    }
+
+    public BufferedImage niblack2(BufferedImage image, double userTreshold, int windowSize) {
+        int threshold[][] = new int[image.getWidth()][image.getHeight()];
+
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                List<Integer> list = new ArrayList<>();
+                int value;
+                for (int i = w - windowSize / 2; i < w + (windowSize / 2); i++) {
+                    if (i > 0 && i < image.getWidth()) {
+                        for (int j = h - windowSize / 2; j < h + (windowSize / 2); j++) {
+                            if (j > 0 && j < image.getHeight()) {
+                                value = new Color(image.getRGB(i, j)).getRed();
+                                list.add(value);
+                            }
+                        }
+                    }
+                }
+                IntSummaryStatistics intSummaryStatistics = list.stream().mapToInt(Integer::intValue).summaryStatistics();
+                double average = intSummaryStatistics.getAverage();
+                double sd = standDev(list, average);
+                threshold[w][h] = (int) (average + userTreshold * sd);
+            }
+        }
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                Color c = new Color(image.getRGB(w, h));
+                if (c.getRed() >= threshold[w][h]) image.setRGB(w, h, Color.WHITE.getRGB());
+                else image.setRGB(w, h, Color.BLACK.getRGB());
+            }
+        }
+        return image;
+    }
 }
+
