@@ -71,7 +71,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label6"
-				"text": "threshold"
+				"text": "constrast threshold"
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "bersenTresholdTextField"
@@ -180,6 +180,27 @@ new FormModel {
 						name: "otsuMenuItem"
 						"text": "otsu"
 						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "otsuMenuItemActionPerformed", true ) )
+					} )
+				} )
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "menu5"
+					"text": "filtration"
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "convolutionallyMenuItem"
+						"text": "convolutionally"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "convolutionallyMenuItemActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "kuwaharMenuItem"
+						"text": "kuwahar"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "medianaMenuItem"
+						"text": "mediana(3)"
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "medianaFiveMenuItem"
+						"text": "mediana(5)"
 					} )
 				} )
 			}

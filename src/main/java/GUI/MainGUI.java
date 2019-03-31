@@ -173,7 +173,7 @@ public class MainGUI extends JFrame {
 
     }
 
-    private static BufferedImage copyImage(BufferedImage source) {
+    public static BufferedImage copyImage(BufferedImage source) {
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
         Graphics g = b.getGraphics();
         g.drawImage(source, 0, 0, null);
@@ -342,6 +342,12 @@ public class MainGUI extends JFrame {
         imageShow.setVisible(true);
     }
 
+    private void convolutionallyMenuItemActionPerformed(ActionEvent e) {
+        convWindow convWindow = new convWindow(copyImage(firstImage));
+        convWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        convWindow.setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -361,6 +367,11 @@ public class MainGUI extends JFrame {
         menuItem4 = new JMenuItem();
         menu4 = new JMenu();
         otsuMenuItem = new JMenuItem();
+        menu5 = new JMenu();
+        convolutionallyMenuItem = new JMenuItem();
+        kuwaharMenuItem = new JMenuItem();
+        medianaMenuItem = new JMenuItem();
+        medianaFiveMenuItem = new JMenuItem();
         scrollPane1 = new JScrollPane();
         imageLabel = new JLabel();
         label1 = new JLabel();
@@ -471,6 +482,29 @@ public class MainGUI extends JFrame {
                 menu4.add(otsuMenuItem);
             }
             menuBar1.add(menu4);
+
+            //======== menu5 ========
+            {
+                menu5.setText("filtration");
+
+                //---- convolutionallyMenuItem ----
+                convolutionallyMenuItem.setText("convolutionally");
+                convolutionallyMenuItem.addActionListener(e -> convolutionallyMenuItemActionPerformed(e));
+                menu5.add(convolutionallyMenuItem);
+
+                //---- kuwaharMenuItem ----
+                kuwaharMenuItem.setText("kuwahar");
+                menu5.add(kuwaharMenuItem);
+
+                //---- medianaMenuItem ----
+                medianaMenuItem.setText("mediana(3)");
+                menu5.add(medianaMenuItem);
+
+                //---- medianaFiveMenuItem ----
+                medianaFiveMenuItem.setText("mediana(5)");
+                menu5.add(medianaFiveMenuItem);
+            }
+            menuBar1.add(menu5);
         }
         setJMenuBar(menuBar1);
 
@@ -513,7 +547,7 @@ public class MainGUI extends JFrame {
         label5.setText("Bernsen binarization");
 
         //---- label6 ----
-        label6.setText("threshold");
+        label6.setText("constrast threshold");
 
         //---- label7 ----
         label7.setText("set_treshold parametr");
@@ -682,6 +716,11 @@ public class MainGUI extends JFrame {
     private JMenuItem menuItem4;
     private JMenu menu4;
     private JMenuItem otsuMenuItem;
+    private JMenu menu5;
+    private JMenuItem convolutionallyMenuItem;
+    private JMenuItem kuwaharMenuItem;
+    private JMenuItem medianaMenuItem;
+    private JMenuItem medianaFiveMenuItem;
     private JScrollPane scrollPane1;
     private JLabel imageLabel;
     private JLabel label1;

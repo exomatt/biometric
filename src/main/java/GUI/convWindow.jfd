@@ -1,0 +1,48 @@
+JFDML JFormDesigner: "6.0.6.2.195" Java: "1.8.0_152-release" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {par l {seq l {space :p:231:p, par l:::p {comp textFieldZero::::75:x, comp textFieldThree::::75:x, comp textFieldSix::l::75:x}, space :p:39:p, par l:::p {comp textFieldOne::::73:x, comp textFieldSeven::::73:x, comp textFieldFour::l::73:x}, space :p:49:p, par l:::p {comp textFieldTwo::::82:x, comp textFieldFive::l::82:x, comp textFieldEight::l::82:x}}, seq l {space :p:354:p, comp buttonMake:::p::p}}, space ::424:x}}"
+			"$verticalGroup": "par l {seq l {space :p:49:p, par b {comp textFieldOne::b:p::p, comp textFieldZero::l:p:30:p, comp textFieldTwo::b:p::p}, space s:::p, par b {comp textFieldThree::b:p::p, comp textFieldFour::b:p::p, comp textFieldFive::b:p:30:p}, space s:::p, par b {comp textFieldSix::b:p::p, comp textFieldSeven::b:p::p, comp textFieldEight::b:p::p}, space :p:55:p, comp buttonMake:::p::p, space ::371:x}}"
+		} ) {
+			name: "this"
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldZero"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldOne"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldTwo"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldThree"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldFour"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldFive"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldSix"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldSeven"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textFieldEight"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "buttonMake"
+				"text": "make"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "buttonMakeActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 20 )
+			"size": new java.awt.Dimension( 975, 660 )
+		} )
+	}
+}
