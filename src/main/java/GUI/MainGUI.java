@@ -366,6 +366,14 @@ public class MainGUI extends JFrame {
         imageShow.setVisible(true);
     }
 
+    private void kuwaharMenuItemActionPerformed(ActionEvent e) {
+        Filtration filtration = new Filtration();
+        BufferedImage image = filtration.kuwaharaFilter(copyImage(firstImage));
+        ImageShow imageShow = new ImageShow(image);
+        imageShow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        imageShow.setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -512,6 +520,7 @@ public class MainGUI extends JFrame {
 
                 //---- kuwaharMenuItem ----
                 kuwaharMenuItem.setText("kuwahar");
+                kuwaharMenuItem.addActionListener(e -> kuwaharMenuItemActionPerformed(e));
                 menu5.add(kuwaharMenuItem);
 
                 //---- medianaMenuItem ----

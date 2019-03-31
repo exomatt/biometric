@@ -141,4 +141,88 @@ public class Filtration {
         }
         return copyImage;
     }
+
+    public BufferedImage kuwaharaFilter(BufferedImage image) {
+        BufferedImage copyImage = MainGUI.copyImage(image);
+
+        int[][] red = new int[image.getWidth()][image.getHeight()];
+        int[][] green = new int[image.getWidth()][image.getHeight()];
+        int[][] blue = new int[image.getWidth()][image.getHeight()];
+
+        for (int w = 0; w < image.getWidth(); w++) {
+            for (int h = 0; h < image.getHeight(); h++) {
+                Color color = new Color(image.getRGB(w, h));
+                red[w][h] = color.getRed();
+                green[w][h] = color.getGreen();
+                blue[w][h] = color.getBlue();
+            }
+        }
+
+        for (int w = 2; w < image.getWidth() - 2; w++) {
+            for (int h = 2; h < image.getHeight() - 2; h++) {
+                int minVarRedIndex = 0;
+                int minVarGreenIndex = 0;
+                int minVarBlueIndex = 0;
+
+                double[] redAverage = new double[4];
+                double[] greenAverage = new double[4];
+                double[] blueAverage = new double[4];
+
+                double[] redVar = new double[4];
+                double[] greenVar = new double[4];
+                double[] blueVar = new double[4];
+
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        redAverage[0] += red[w - 2 + i][h - 2 + j] / 9.0;
+                        redAverage[1] += red[w + i][h - 2 + j] / 9.0;
+                        redAverage[2] += red[w - 2 + i][h + j] / 9.0;
+                        redAverage[3] += red[w + i][h + j] / 9.0;
+
+                        greenAverage[0] += green[w - 2 + i][h - 2 + j] / 9.0;
+                        greenAverage[1] += green[w + i][h - 2 + j] / 9.0;
+                        greenAverage[2] += green[w - 2 + i][h + j] / 9.0;
+                        greenAverage[3] += green[w + i][h + j] / 9.0;
+
+                        blueAverage[0] += blue[w - 2 + i][h - 2 + j] / 9.0;
+                        blueAverage[1] += blue[w + i][h - 2 + j] / 9.0;
+                        blueAverage[2] += blue[w - 2 + i][h + j] / 9.0;
+                        blueAverage[3] += blue[w + i][h + j] / 9.0;
+                    }
+                }
+
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        redVar[0] += Math.pow(red[w - 2 + i][h - 2 + j] - redAverage[0], 2);
+                        redVar[1] += Math.pow(red[w + i][h - 2 + j] - redAverage[1], 2);
+                        redVar[2] += Math.pow(red[w - 2 + i][h + j] - redAverage[2], 2);
+                        redVar[3] += Math.pow(red[w + i][h + j] - redAverage[3], 2);
+
+                        greenVar[0] += Math.pow(green[w - 2 + i][h - 2 + j] - greenAverage[0], 2);
+                        greenVar[1] += Math.pow(green[w + i][h - 2 + j] - greenAverage[1], 2);
+                        greenVar[2] += Math.pow(green[w - 2 + i][h + j] - greenAverage[2], 2);
+                        greenVar[3] += Math.pow(green[w + i][h + j] - greenAverage[3], 2);
+
+                        blueVar[0] += Math.pow(blue[w - 2 + i][h - 2 + j] - blueAverage[0], 2);
+                        blueVar[1] += Math.pow(blue[w + i][h - 2 + j] - blueAverage[1], 2);
+                        blueVar[2] += Math.pow(blue[w - 2 + i][h + j] - blueAverage[2], 2);
+                        blueVar[3] += Math.pow(blue[w + i][h + j] - blueAverage[3], 2);
+                    }
+                }
+
+                for (int i = 1; i < 4; i++) {
+                    if (redVar[minVarRedIndex] > redVar[i]) {
+                        minVarRedIndex = i;
+                    }
+                    if (greenVar[minVarGreenIndex] > greenVar[i])
+                        minVarGreenIndex = i;
+                    if (blueVar[minVarBlueIndex] > blueVar[i])
+                        minVarBlueIndex = i;
+                }
+                copyImage.setRGB(w, h, new Color((int) redAverage[minVarRedIndex], (int) greenAverage[minVarGreenIndex], (int) blueAverage[minVarBlueIndex]).getRGB());
+            }
+        }
+
+        return copyImage;
+    }
 }
