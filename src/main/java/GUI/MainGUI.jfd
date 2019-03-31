@@ -197,10 +197,12 @@ new FormModel {
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "medianaMenuItem"
 						"text": "mediana(3)"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "medianaMenuItemActionPerformed", true ) )
 					} )
 					add( new FormComponent( "javax.swing.JMenuItem" ) {
 						name: "medianaFiveMenuItem"
 						"text": "mediana(5)"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "medianaFiveMenuItemActionPerformed", true ) )
 					} )
 				} )
 			}

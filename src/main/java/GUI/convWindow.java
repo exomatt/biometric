@@ -4,7 +4,7 @@
 
 package GUI;
 
-import filtration.ConFiltration;
+import filtration.Filtration;
 import lombok.extern.java.Log;
 
 import javax.swing.*;
@@ -60,8 +60,8 @@ public class convWindow extends JFrame {
             JOptionPane.showMessageDialog(null, "ALL fields should be a number!!", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
 
-        ConFiltration conFiltration = new ConFiltration();
-        BufferedImage newImage = conFiltration.filterImage(this.image, table);
+        Filtration filtration = new Filtration();
+        BufferedImage newImage = filtration.convolutionallyVFilterImage(this.image, table);
         ImageShow imageShow = new ImageShow(newImage);
         imageShow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         imageShow.setVisible(true);

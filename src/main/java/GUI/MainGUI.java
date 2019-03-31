@@ -6,6 +6,7 @@ package GUI;
 
 import binarization.BinarizationOperations;
 import binarization.ColorChanger;
+import filtration.Filtration;
 import histogramoperations.Histogram;
 import imageoperation.ImageReaderSaver;
 import lombok.extern.java.Log;
@@ -348,6 +349,23 @@ public class MainGUI extends JFrame {
         convWindow.setVisible(true);
     }
 
+    private void medianaMenuItemActionPerformed(ActionEvent e) {
+        medianFilterStart(3);
+
+    }
+
+    private void medianaFiveMenuItemActionPerformed(ActionEvent e) {
+        medianFilterStart(5);
+    }
+
+    private void medianFilterStart(int i) {
+        Filtration filtration = new Filtration();
+        BufferedImage newImage = filtration.medianFilter(copyImage(firstImage), i);
+        ImageShow imageShow = new ImageShow(newImage);
+        imageShow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        imageShow.setVisible(true);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - name
@@ -498,10 +516,12 @@ public class MainGUI extends JFrame {
 
                 //---- medianaMenuItem ----
                 medianaMenuItem.setText("mediana(3)");
+                medianaMenuItem.addActionListener(e -> medianaMenuItemActionPerformed(e));
                 menu5.add(medianaMenuItem);
 
                 //---- medianaFiveMenuItem ----
                 medianaFiveMenuItem.setText("mediana(5)");
+                medianaFiveMenuItem.addActionListener(e -> medianaFiveMenuItemActionPerformed(e));
                 menu5.add(medianaFiveMenuItem);
             }
             menuBar1.add(menu5);
